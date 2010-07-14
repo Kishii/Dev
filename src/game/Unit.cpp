@@ -6516,6 +6516,24 @@ bool Unit::IsSpellCrit(Unit *pVictim, SpellEntry const *spellProto, SpellSchoolM
                                 }
                             }
                         }
+						 // Glyph of Shred
+						 case 54815:
+						 {
+							if (Aura * aurEff = target->GetAura(SPELL_AURA_PERIODIC_DAMAGE,SPELLFAMILY_DRUID,0x00800000,0,GetGUID()))
+						   {
+								uint32 countMin = aurEff->GetAuraMaxDuration();
+								uint32 countMax = 20000;
+								countMax += HasAura(54818) ? 4000 : 0;
+								countMax += HasAura(60141) ? 4000 : 0;
+
+								if (countMin < countMax)
+								{
+									aurEff->SetAuraDuration(uint32(aurEff->GetAuraDuration()+3000));
+									aurEff->SetAuraMaxDuration(countMin+2000);
+									aurEff->SendAuraUpdate(false);
+								}
+							}
+						 }
                         break;
                     case SPELLFAMILY_PALADIN:
                         // Sacred Shield
