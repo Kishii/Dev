@@ -2114,9 +2114,7 @@ bool ChatHandler::HandleAddItemCommand(const char* args)
         count = 1;
 
     Player* pl = m_session->GetPlayer();
-    Player* plTarget = getSelectedPlayer();
-    if(!plTarget)
-        plTarget = pl;
+    Player* plTarget = pl;
 
     DETAIL_LOG(GetMangosString(LANG_ADDITEM), itemId, count);
 
@@ -2193,9 +2191,7 @@ bool ChatHandler::HandleAddItemSetCommand(const char* args)
     }
 
     Player* pl = m_session->GetPlayer();
-    Player* plTarget = getSelectedPlayer();
-    if(!plTarget)
-        plTarget = pl;
+    Player* plTarget = pl;
 
     DETAIL_LOG(GetMangosString(LANG_ADDITEMSET), itemsetId);
 

@@ -2082,9 +2082,7 @@ bool ChatHandler::HandleModifyMorphCommand(const char* args)
 
     uint16 display_id = (uint16)atoi((char*)args);
 
-    Unit *target = getSelectedUnit();
-    if (!target)
-        target = m_session->GetPlayer();
+    Unit *target = m_session->GetPlayer();
 
     // check online security
     else if (target->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity((Player*)target, 0))
