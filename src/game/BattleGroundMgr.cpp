@@ -1811,13 +1811,6 @@ void BattleGroundMgr::BuildBattleGroundListPacket(WorldPacket *data, const uint6
     win_kills = (uint32)MaNGOS::Honor::hk_honor_at_level(plr->getLevel(), win_kills*4);
     loos_kills = (uint32)MaNGOS::Honor::hk_honor_at_level(plr->getLevel(), loos_kills*4);
 
-    uint32 win_kills = plr->GetRandomWinner() ? BG_REWARD_WINNER_HONOR_LAST : BG_REWARD_WINNER_HONOR_FIRST;
-    uint32 win_arena = plr->GetRandomWinner() ? BG_REWARD_WINNER_ARENA_LAST : BG_REWARD_WINNER_ARENA_FIRST;
-    uint32 loos_kills = plr->GetRandomWinner() ? BG_REWARD_LOOSER_HONOR_LAST : BG_REWARD_LOOSER_HONOR_FIRST;
-
-    win_kills = (uint32)MaNGOS::Honor::hk_honor_at_level(plr->getLevel(), win_kills*4);
-    loos_kills = (uint32)MaNGOS::Honor::hk_honor_at_level(plr->getLevel(), loos_kills*4);
-
     data->Initialize(SMSG_BATTLEFIELD_LIST);
     *data << uint64(guid);                                  // battlemaster guid
     *data << uint8(fromWhere);                              // from where you joined
