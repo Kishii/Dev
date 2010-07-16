@@ -4436,10 +4436,10 @@ SpellCastResult Spell::CheckCast(bool strict)
             }
             // TODO: this check can be applied and for player to prevent cheating when IsPositiveSpell will return always correct result.
             // check target for pet/charmed casts (not self targeted), self targeted cast used for area effects and etc
-            if (!explicit_target_mode && m_caster->GetTypeId() == TYPEID_UNIT && m_caster->GetCharmerOrOwnerGUID())
+            if (!explicit_target_mode && m_caster->GetTypeId() == TYPEID_UNIT && m_caster->GetCharmerOrOwnerGUID() && !IsDispelSpell(m_spellInfo))
             {
                 // check correctness positive/negative cast target (pet cast real check and cheating check)
-                if(IsPositiveSpell(m_spellInfo->Id))
+                if(IsPositiveSpell(m_spellInfo->Id) && !IsDispelSpell(m_spellInfo))
                 {
                     if (!target_hostile_checked)
                     {
@@ -5341,7 +5341,7 @@ SpellCastResult Spell::CheckPetCast(Unit* target)
                                                             //TARGET_DUELVSPLAYER is positive AND negative
                     duelvsplayertar |= (m_spellInfo->EffectImplicitTargetA[j] == TARGET_DUELVSPLAYER);
                 }
-                if(m_caster->IsFriendlyTo(target) && !duelvsplayertar)
+                if(m_caster->IsFriendlyTo(target) && !duelvsplayertar && !IsDispelSpell(m_spellInfo))
                 {
                     return SPELL_FAILED_BAD_TARGETS;
                 }
