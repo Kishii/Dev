@@ -6234,7 +6234,14 @@ uint32 Unit::SpellDamageBonusDone(Unit *pVictim, SpellEntry const *spellProto, u
                     if (Aura *aur = GetAura(55692, EFFECT_INDEX_0))
                         DoneTotalMod *= (aur->GetModifier()->m_amount+100.0f) / 100.0f;
             }
-            break;
+			// Glyph of Prayer of Healing
+			case 55680:
+			{
+				basepoints[0] = int32(damage * 20 / 100 / 2);   // divided in two ticks
+				triggered_spell_id = 56161;
+				break;
+			}
+			break;
         }
         case SPELLFAMILY_DRUID:
         {
