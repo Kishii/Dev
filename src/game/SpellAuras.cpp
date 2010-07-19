@@ -2902,7 +2902,7 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
                 case FORM_DIREBEAR:
                 {
                     // Heart of the Wild
-                    Unit::AuraList const& mStats = m_target->GetAurasByType(SPELL_AURA_MOD_STAT);
+                    Unit::AuraList const& mStats = target->GetAurasByType(SPELL_AURA_MOD_STAT);
                     for(Unit::AuraList::const_iterator i = mStats.begin(); i != mStats.end(); ++i)
                     {
                         switch ((*i)->GetSpellProto()->Id)
@@ -2915,12 +2915,12 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
                             {
                                 int32 statsBonus = (*i)->GetSpellProto()->EffectBasePoints[1];
                                 if (form == FORM_CAT)
-                                    m_target->CastCustomSpell(m_target, 24900, &statsBonus, NULL, NULL, true);
+                                    target->CastCustomSpell(target, 24900, &statsBonus, NULL, NULL, true);
                                 else
                                 {
-                                    m_target->CastCustomSpell(m_target, 24899, &statsBonus, NULL, NULL, true);
-                                    int32 health = statsBonus * m_target->GetMaxHealth() / 100;
-                                    m_target->CastCustomSpell(m_target, 25142, &health, NULL, NULL, true);
+                                    target->CastCustomSpell(target, 24899, &statsBonus, NULL, NULL, true);
+                                    int32 health = statsBonus * target->GetMaxHealth() / 100;
+                                    target->CastCustomSpell(target, 25142, &health, NULL, NULL, true);
                                 }
                                 break;
                             }
@@ -3037,7 +3037,7 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
     // add/remove the shapeshift aura's boosts
     HandleShapeshiftBoosts(apply);
 	
-	m_target->UpdateSpeed(MOVE_RUN, true);
+	target->UpdateSpeed(MOVE_RUN, true);
 
     if(target->GetTypeId() == TYPEID_PLAYER)
         ((Player*)target)->InitDataForForm();
@@ -4215,11 +4215,13 @@ void Aura::HandleAuraModIncreaseSpeed(bool apply, bool Real)
     // all applied/removed only at real aura add/remove
     if(!Real)
         return;
+		
+	Unit *target = GetTarget();
 
     GetTarget()->UpdateSpeed(MOVE_RUN, true);
 	
     if (apply && GetSpellProto()->Id == 58875)
-        GetTarget->CastSpell(GetTarget, 58876, true);
+        target->CastSpell(target, 58876, true);
 }
 
 void Aura::HandleAuraModIncreaseMountedSpeed(bool apply, bool Real)
@@ -4385,14 +4387,14 @@ void Aura::HandleModMechanicImmunity(bool apply, bool /*Real*/)
     // Demonic Circle
     if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_WARLOCK && GetSpellProto()->SpellIconID == 3221)
     {
-        if (m_target->GetTypeId() != TYPEID_PLAYER)
+        if (target->GetTypeId() != TYPEID_PLAYER)
             return;
         if (apply)
         {
-            GameObject* obj = m_target->GetGameObject(48018);
+            GameObject* obj = target->GetGameObject(48018);
             if (obj)
-                if (m_target->IsWithinDist(obj,GetSpellMaxRange(sSpellRangeStore.LookupEntry(GetSpellProto()->rangeIndex))))
-                    ((Player*)m_target)->TeleportTo(obj->GetMapId(),obj->GetPositionX(),obj->GetPositionY(),obj->GetPositionZ(),obj->GetOrientation());
+                if (target->IsWithinDist(obj,GetSpellMaxRange(sSpellRangeStore.LookupEntry(GetSpellProto()->rangeIndex))))
+                    ((Player*)target)->TeleportTo(obj->GetMapId(),obj->GetPositionX(),obj->GetPositionY(),obj->GetPositionZ(),obj->GetOrientation());
         }
     }
 	
@@ -4419,7 +4421,9 @@ void Aura::HandleModMechanicImmunity(bool apply, bool /*Real*/)
     }
     // Heroic Fury (Intercept cooldown remove)
     else if (apply && GetSpellProto()->Id == 60970 && target->GetTypeId() == TYPEID_PLAYER)
+	{
         ((Player*)target)->RemoveSpellCooldown(20252, true);
+	}
 }
 
 void Aura::HandleModMechanicImmunityMask(bool apply, bool /*Real*/)
@@ -4644,8 +4648,8 @@ void Aura::HandlePeriodicEnergize(bool apply, bool Real)
         switch (GetId())
         {
             case 5229:                                      // Druid Bear Enrage
-                if (m_target->HasAura(51185))               // King of the Jungle self Enrage bonus with infinity duration
-                    m_target->RemoveAurasDueToSpell(51185);
+                if (target->HasAura(51185))               // King of the Jungle self Enrage bonus with infinity duration
+                    target->RemoveAurasDueToSpell(51185);
                 break;
             default:
                 break;
@@ -4685,21 +4689,6 @@ void Aura::HandleAuraPeriodicDummy(bool apply, bool Real)
                 }
             }
             break;
-        }
-        case SPELLFAMILY_WARLOCK:
-        {
-            switch (spell->Id)
-            {
-                case 48018:
-                    if (apply)
-                        SendFakeAuraUpdate(62388,false);
-                    else
-                    {
-                        m_target->RemoveGameObject(spell->Id,true);
-                        SendFakeAuraUpdate(62388,true);
-                    }
-                break;
-            }
         }
         case SPELLFAMILY_HUNTER:
         {
@@ -7337,20 +7326,6 @@ void Aura::PeriodicDummyTick()
             }
             break;
         }
-        case SPELLFAMILY_WARLOCK:
-            switch (spell->Id)
-            {
-                case 48018:
-                    GameObject* obj = m_target->GetGameObject(spell->Id);
-                    if (!obj) return;
-                    // We must take a range of teleport spell, not summon.
-                    const SpellEntry* goToCircleSpell = sSpellStore.LookupEntry(48020);
-                    if (m_target->IsWithinDist(obj,GetSpellMaxRange(sSpellRangeStore.LookupEntry(goToCircleSpell->rangeIndex))))
-                        SendFakeAuraUpdate(62388,false);
-                    else
-                        SendFakeAuraUpdate(62388,true);
-            }
-            break;
         case SPELLFAMILY_ROGUE:
         {
             switch (spell->Id)
@@ -8224,38 +8199,6 @@ bool SpellAuraHolder::IsNeedVisibleSlot(Unit const* caster) const
     return !m_isPassive || totemAura || HasAreaAuraEffect(m_spellProto);
 }
 
-void Aura::SendFakeAuraUpdate(uint32 auraId, bool remove)
-{
-    WorldPacket data(SMSG_AURA_UPDATE);
-    data << m_target->GetPackGUID();
-    data << uint8(64);
-    data << uint32(remove ? 0 : auraId);
-
-    if(remove)
-    {
-        m_target->SendMessageToSet(&data, true);
-        return;
-    }
-
-    uint8 auraFlags = GetAuraFlags();
-    data << uint8(auraFlags);
-    data << uint8(GetAuraLevel());
-    data << uint8(m_procCharges ? m_procCharges : m_stackAmount);
-
-    if(!(auraFlags & AFLAG_NOT_CASTER))
-    {
-        data << uint8(0);                                   // pguid
-    }
-
-    if(auraFlags & AFLAG_DURATION)
-    {
-        data << uint32(GetAuraMaxDuration());
-        data << uint32(GetAuraDuration());
-    }
-
-    m_target->SendMessageToSet(&data, true);
-}
-
 void SpellAuraHolder::SendAuraUpdate(bool remove)
 {
     WorldPacket data(SMSG_AURA_UPDATE);
@@ -8617,7 +8560,7 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
                     return;
 
                 if (apply && caster->HasAura(31821))
-                    caster->CastSpell(caster, 64364, true, NULL, this);
+					caster->CastSpell(caster, 64364, true);
                 else if (!apply)
                     caster->RemoveAurasDueToSpell(64364);
             }
@@ -8628,7 +8571,7 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
                     return;
 
                 if (apply && caster->HasAura(19746))
-                    caster->CastSpell(caster, 64364, true, NULL, this);
+					caster->CastSpell(caster, 64364, true);
                 else if (!apply)
                     caster->RemoveAurasDueToSpell(64364);
             }
