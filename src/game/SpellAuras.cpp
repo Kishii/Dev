@@ -3328,7 +3328,7 @@ void Aura::HandleChannelDeathItem(bool apply, bool Real)
 void Aura::HandleBindSight(bool apply, bool /*Real*/)
 {
     Unit* caster = GetCaster();
-    if(!caster || caster->GetTypeId() != TYPEID_PLAYER)
+    if(!caster || !caster->IsInWorld() || caster->GetTypeId() != TYPEID_PLAYER)
         return;
 
     Camera& camera = ((Player*)caster)->GetCamera();
