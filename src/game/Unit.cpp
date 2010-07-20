@@ -2363,7 +2363,7 @@ void Unit::CalculateAbsorbResistBlock(Unit *pCaster, SpellNonMeleeDamage *damage
     damageInfo->damage-= damageInfo->absorb + damageInfo->resist;
 }
 
-void Unit::CalcHealAbsorb(Unit *pVictim, const SpellEntry *spellProto, uint32 &HealAmount, uint32 &Absorbed)
+void Unit::CalculateHealAbsorb(Unit *pVictim, const SpellEntry *spellProto, uint32 &HealAmount, uint32 &Absorbed)
 {
     int32 finalAmount = int32(HealAmount);
     bool existExpired = false;
@@ -2584,7 +2584,7 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst (const Unit *pVictim, WeaponAttack
     // parry & block chances
 
     // check if attack comes from behind, nobody can parry or block if attacker is behind
-    if (!pVictim->HasInArc(M_PI_F,this))
+    if (!pVictim->HasInArc(M_PI_F,this) && !pVictim->HasAura(19263))
     {
         DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: attack came from behind.");
     }
@@ -5918,7 +5918,7 @@ int32 Unit::DealHeal(Unit *pVictim, uint32 addhealth, SpellEntry const *spellPro
 {
     // calculate heal absorb and reduce healing
     uint32 absorb = 0;
-    CalcHealAbsorb(pVictim, spellProto, addhealth, absorb);
+    CalculateHealAbsorb(pVictim, spellProto, addhealth, absorb);
 
     int32 gain = addhealth ? pVictim->ModifyHealth(int32(addhealth)) : 0;
 

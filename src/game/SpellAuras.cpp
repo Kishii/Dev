@@ -6744,10 +6744,10 @@ void Aura::PeriodicTick()
 
             // calculate heal absorb and reduce healing
             uint32 absorb = 0;
-            pCaster->CalcHealAbsorb(m_target, GetSpellProto(), pdamage, absorb);
+            pCaster->CalculateHealAbsorb(m_target, GetSpellProto(), pdamage, absorb);
 
             int32 gain = target->ModifyHealth(pdamage);
-            SpellPeriodicAuraLogInfo pInfo(this, pdamage, (pdamage - uint32(gain)), absorb, 0, 0.0f, isCrit);
+            SpellPeriodicAuraLogInfo pInfo(this, pdamage, (pdamage - uint32(gain) - absorb), absorb, 0, 0.0f, isCrit);
             target->SendPeriodicAuraLog(&pInfo);
 
             // Set trigger flag
