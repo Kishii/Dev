@@ -6338,6 +6338,12 @@ uint32 Unit::SpellDamageBonusDone(Unit *pVictim, SpellEntry const *spellProto, u
                 }
                 break;
             }
+            // Rune strike
+            if (dummySpell->Id == 56817)
+            {
+                if (procSpell && procSpell->Id != 56815)
+                    return false;
+            }
 			break;
         }
         default:
