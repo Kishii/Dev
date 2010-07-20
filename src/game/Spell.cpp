@@ -196,10 +196,6 @@ void SpellCastTargets::Update(Unit* caster)
     m_unitTarget = !m_unitTargetGUID.IsEmpty() ?
         ( m_unitTargetGUID == caster->GetObjectGuid() ? caster : ObjectAccessor::GetUnit(*caster, m_unitTargetGUID) ) :
     NULL;
-
-    if (m_unitTarget && m_unitTargetGUID != caster->GetObjectGuid() &&
-        !m_unitTarget->isVisibleForOrDetect(caster, caster, false))
-            m_unitTarget = NULL;
 	
     m_itemTarget = NULL;
     if (caster->GetTypeId() == TYPEID_PLAYER)
@@ -3192,6 +3188,9 @@ void Spell::update(uint32 difftime)
         {
             if(m_timer)
             {
+                if (!m_targets.getUnitTarget()->isVisibleForOrDetect(m_caster, m_caster, false))
+                    cancel();
+
                 if(difftime >= m_timer)
                     m_timer = 0;
                 else
