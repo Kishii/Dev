@@ -197,6 +197,10 @@ void SpellCastTargets::Update(Unit* caster)
         ( m_unitTargetGUID == caster->GetObjectGuid() ? caster : ObjectAccessor::GetUnit(*caster, m_unitTargetGUID) ) :
     NULL;
 
+    if (m_unitTarget && m_unitTargetGUID != caster->GetObjectGuid() &&
+        !m_unitTarget->isVisibleForOrDetect(caster, caster, false))
+            m_unitTarget = NULL;
+	
     m_itemTarget = NULL;
     if (caster->GetTypeId() == TYPEID_PLAYER)
     {
@@ -2431,6 +2435,11 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
         {
             // add here custom effects that need default target.
             // FOR EVERY TARGET TYPE THERE IS A DIFFERENT FILL!!
+            if (m_spellInfo->SpellFamilyFlags2 & UI64LIT (0x00000020) && m_spellInfo->SpellIconID == 3217)
+            {
+                targetUnitMap.push_back(m_caster);
+                break;
+            }
             if (m_spellInfo->SpellFamilyFlags2 & UI64LIT (0x00000020) && m_spellInfo->SpellIconID == 3217)
             {
                 targetUnitMap.push_back(m_caster);

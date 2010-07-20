@@ -6392,13 +6392,6 @@ uint32 Unit::SpellDamageBonusDone(Unit *pVictim, SpellEntry const *spellProto, u
                 }
                 break;
             }
-            // Rune strike
-            else if (auraSpellInfo->Id == 56816)
-            {
-                if( Aura * pAura = this->GetAura(56816, EFFECT_INDEX_0))
-                    pAura->SendFakeAuraUpdate(56817, false);
-                    return true;
-            }
 			break;
         }
         default:
