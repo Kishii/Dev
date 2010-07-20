@@ -5065,7 +5065,7 @@ void Unit::SendPeriodicAuraLog(SpellPeriodicAuraLogInfo *pInfo)
     {
         case SPELL_AURA_PERIODIC_DAMAGE:
         case SPELL_AURA_PERIODIC_DAMAGE_PERCENT:
-            data << uint32(pInfo->damage - pInfo->absorb - pInfo->resist);   // damage
+            data << uint32(pInfo->damage);                  // damage
             data << uint32(pInfo->overDamage);              // overkill?
             data << uint32(GetSpellSchoolMask(aura->GetSpellProto()));
             data << uint32(pInfo->absorb);                  // absorb
@@ -6406,10 +6406,11 @@ uint32 Unit::SpellDamageBonusDone(Unit *pVictim, SpellEntry const *spellProto, u
                 break;
             }
             // Rune strike
-            if (dummySpell->Id == 56817)
+            else if (auraSpellInfo->Id == 56816)
             {
-                if (procSpell && procSpell->Id != 56815)
-                    return false;
+                if( Aura * pAura = this->GetAura(56816, EFFECT_INDEX_0))
+                    pAura->SendFakeAuraUpdate(56817, false);
+                    return true;
             }
 			break;
         }
