@@ -2412,7 +2412,7 @@ void Unit::CalculateAbsorbResistBlock(Unit *pCaster, SpellNonMeleeDamage *damage
     damageInfo->damage-= damageInfo->absorb + damageInfo->resist;
 }
 
-void Unit::CalculateHealAbsorb(Unit *pVictim, const SpellEntry *spellProto, uint32 &HealAmount, uint32 &Absorbed)
+void Unit::CalcHealAbsorb(Unit *pVictim, const SpellEntry *spellProto, uint32 &HealAmount, uint32 &Absorbed)
 {
     int32 finalAmount = int32(HealAmount);
     bool existExpired = false;
@@ -2446,9 +2446,6 @@ void Unit::CalculateHealAbsorb(Unit *pVictim, const SpellEntry *spellProto, uint
 
         // reduce aura amount
         mod->m_amount -= currentAbsorb;
-
-        if ((*aura)->DropAuraCharge())
-            mod->m_amount = 0;
 
         // check if aura needs to be removed
         if (mod->m_amount <= 0)
@@ -4040,13 +4037,7 @@ bool Unit::AddSpellAuraHolder(SpellAuraHolder *holder)
                         RemoveSpellAuraHolder(foundHolder,AURA_REMOVE_BY_STACK);
                         stop = true;
                         break;
-                }  
-                // Judgements are always single 
-                else if (GetSpellSpecific(Aur->GetId()) == SPELL_JUDGEMENT)
-                {
-                    RemoveAura(i2,AURA_REMOVE_BY_STACK);
-                    break;
-                }
+                } 
             }
 
             if(stop)
@@ -5967,7 +5958,7 @@ int32 Unit::DealHeal(Unit *pVictim, uint32 addhealth, SpellEntry const *spellPro
 {
     // calculate heal absorb and reduce healing
     uint32 absorb = 0;
-    CalculateHealAbsorb(pVictim, spellProto, addhealth, absorb);
+    CalcHealAbsorb(pVictim, spellProto, addhealth, absorb);
 
     int32 gain = addhealth ? pVictim->ModifyHealth(int32(addhealth)) : 0;
 
@@ -6356,13 +6347,6 @@ uint32 Unit::SpellDamageBonusDone(Unit *pVictim, SpellEntry const *spellProto, u
                     if (Aura *aur = GetAura(55692, EFFECT_INDEX_0))
                         DoneTotalMod *= (aur->GetModifier()->m_amount+100.0f) / 100.0f;
             }
-			// Glyph of Prayer of Healing
-			case 55680:
-			{
-				basepoints[0] = int32(damage * 20 / 100 / 2);   // divided in two ticks
-				triggered_spell_id = 56161;
-				break;
-			}
 			break;
         }
         case SPELLFAMILY_DRUID:
@@ -6417,8 +6401,11 @@ uint32 Unit::SpellDamageBonusDone(Unit *pVictim, SpellEntry const *spellProto, u
                 }
             }
             // Sudden Doom
-            if (dummySpell->SpellIconID == 1939)
+            if (spellProto->SpellIconID == 1939)
             {
+				uint32 triggered_spell_id = 0;
+				Unit *target = getVictim();
+			
                 if (!target || !target->isAlive() || this->GetTypeId() != TYPEID_PLAYER)
                     return false;
                 
@@ -6435,67 +6422,11 @@ uint32 Unit::SpellDamageBonusDone(Unit *pVictim, SpellEntry const *spellProto, u
 
                     if (spellInfo->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && spellInfo->SpellFamilyFlags & UI64LIT(0x2000))
                     {
-                        triggered_spell_id = spellInfo->Id;
+						triggered_spell_id = spellInfo->Id;
                         break;
                     }
                 }
                 break;
-            }
-            // Blood of the North and Reaping
-            if (dummySpell->SpellIconID == 3041 || dummySpell->SpellIconID == 22)
-            {
-                if(GetTypeId()!=TYPEID_PLAYER)
-                    return false;
-                
-                Player *player = (Player*)this;
-                for (uint32 i = 0; i < MAX_RUNES; ++i)
-                {
-                    if (player->GetCurrentRune(i) == RUNE_BLOOD)
-                    {
-                        if(!player->GetRuneCooldown(i))
-                            player->ConvertRune(i, RUNE_DEATH, dummySpell->Id);
-                        else
-                        {
-                            // search for another rune that might be available
-                            for (uint32 iter = i; iter < MAX_RUNES; ++iter)
-                            {
-                                if(player->GetCurrentRune(iter) == RUNE_BLOOD && !player->GetRuneCooldown(iter))
-                                {
-                                    player->ConvertRune(iter, RUNE_DEATH, dummySpell->Id);
-                                    triggeredByAura->SetAuraPeriodicTimer(0);
-                                    return true;
-                                }
-                            }
-                            player->SetNeedConvertRune(i, true, dummySpell->Id);
-                        }
-                        triggeredByAura->SetAuraPeriodicTimer(0);
-                        return true;
-                    }
-                }
-                return false;
-            }
-            // Death Rune Mastery
-            if (dummySpell->SpellIconID == 2622)
-            {
-                if(GetTypeId()!=TYPEID_PLAYER)
-                    return false;
-                
-                Player *player = (Player*)this;
-                for (uint32 i = 0; i < MAX_RUNES; ++i)
-                {
-                    RuneType currRune = player->GetCurrentRune(i);
-                    if (currRune == RUNE_UNHOLY || currRune == RUNE_FROST)
-                    {
-                        uint16 cd = player->GetRuneCooldown(i);
-                        if(!cd)
-                            player->ConvertRune(i, RUNE_DEATH, dummySpell->Id);
-                        else // there is a cd
-                            player->SetNeedConvertRune(i, true, dummySpell->Id);
-                        // no break because it converts all
-                    }
-                }
-                triggeredByAura->SetAuraPeriodicTimer(0);
-                return true;
             }
 			break;
         }
@@ -8758,18 +8689,6 @@ int32 Unit::CalculateSpellDamage(Unit const* target, SpellEntry const* spellProt
             (spellProto->Effect[effect_index] != SPELL_EFFECT_APPLY_AURA || spellProto->EffectApplyAuraName[effect_index] != SPELL_AURA_MOD_DECREASE_SPEED))
         value = int32(value*0.25f*exp(getLevel()*(70-spellProto->spellLevel)/1000.0f));
 
-	// Frostbite trigger aura: if Fingers of Frost is active, it has saved a roll:
-    if(spellProto->EffectTriggerSpell[effect_index] == 12494)
-    {
-        sLog.outDebug("CalculateSpellDamage: called for 12494 (Frostbite), chance is: %u", value);
-        if(m_lastAuraProcRoll >=0) //override independent trigger
-        {
-            sLog.outDebug("CalculateSpellDamage: saved roll from FoF is: %f", m_lastAuraProcRoll);
-            return value > m_lastAuraProcRoll ? 100 : 0;
-        }
-        sLog.outDebug("CalculateSpellDamage: no  saved roll for 12494 (Frostbite)");
-    }
-
     return value;
 }
 
@@ -9777,9 +9696,6 @@ void Unit::ProcDamageAndSpellFor( bool isVictim, Unit * pTarget, uint32 procFlag
 
     RemoveSpellList removedSpells;
     ProcTriggeredList procTriggered;
-    // reset saved roll from Fingers of Frost:
-    if(GetTypeId() == TYPEID_PLAYER)
-        m_lastAuraProcRoll = -1.0f;
     // Fill procTriggered list
     for(SpellAuraHolderMap::const_iterator itr = GetSpellAuraHolderMap().begin(); itr!= GetSpellAuraHolderMap().end(); ++itr)
     {
@@ -9877,13 +9793,6 @@ void Unit::ProcDamageAndSpellFor( bool isVictim, Unit * pTarget, uint32 procFlag
             RemoveAuraHolderFromStack(*i);
     }
 
-    // Fingers of Frost: save roll for re-use in Frostbite trigger
-    if(aura->GetSpellProto()->EffectTriggerSpell[aura->GetEffIndex()] == 44544)
-    {
-        sLog.outDebug("Fingers of Frost: saving roll; triggered by %u", aura->GetId());
-        m_lastAuraProcRoll = rand_chance();
-        return chance > m_lastAuraProcRoll;
-    }
 }
 
 SpellSchoolMask Unit::GetMeleeDamageSchoolMask() const
