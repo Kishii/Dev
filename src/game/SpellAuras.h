@@ -366,7 +366,7 @@ class MANGOS_DLL_SPEC Aura
         void HandleAuraModAllCritChance(bool Apply, bool Real);
 		void HandleAuraMirrorImage(bool Apply, bool Real);
         void HandleAllowOnlyAbility(bool Apply, bool Real);
-		void HandleAuraOpenStable(bool apply, bool Real);
+        void HandleAuraOpenStable(bool apply, bool Real);
 
         virtual ~Aura();
 
@@ -440,7 +440,7 @@ class MANGOS_DLL_SPEC Aura
 
         uint32 const *getAuraSpellClassMask() const { return  m_spellAuraHolder->GetSpellProto()->GetEffectSpellClassMask(m_effIndex); }
         bool isAffectedOnSpell(SpellEntry const *spell) const;
-        bool CanProcFrom(SpellEntry const *spell) const;
+        bool CanProcFrom(SpellEntry const *spell, uint32 EventProcEx, uint32 procEx, bool active) const;
 
         //SpellAuraHolder const* GetHolder() const { return m_spellHolder; }
         SpellAuraHolder* GetHolder() { return m_spellAuraHolder; }
