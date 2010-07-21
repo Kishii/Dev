@@ -6348,9 +6348,9 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     }
 
                     Aura* chargesaura = m_caster->GetAura(59907,EFFECT_INDEX_0);
-                    if(chargesaura && chargesaura->GetAuraCharges() >= 1)
+                    if(chargesaura && chargesaura->GetHolder()->GetAuraCharges() >= 1)
                      {
-                       chargesaura->SetAuraCharges(chargesaura->GetAuraCharges() - 1);
+                       chargesaura->GetHolder()->SetAuraCharges(chargesaura->GetHolder()->GetAuraCharges() - 1);
                        m_caster->CastCustomSpell(unitTarget, spellID, &damage, NULL, NULL, true, NULL, NULL, m_originalCasterGUID);
                      }
                     else
@@ -6371,7 +6371,7 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                         {
                             aurEff->SetAuraDuration(uint32(aurEff->GetAuraDuration()+3000));
                             aurEff->SetAuraMaxDuration(countMin+3000);
-                            aurEff->SendAuraUpdate(false);
+                            aurEff->GetHolder()->SendAuraUpdate(false);
                         }
                     }
                     return;

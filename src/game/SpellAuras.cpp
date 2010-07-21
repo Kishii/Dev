@@ -7849,6 +7849,9 @@ void Aura::HandleAuraSafeFall( bool Apply, bool Real )
 
 bool Aura::IsCritFromAbilityAura(Unit* caster, uint32& damage)
 {
+
+	Unit *target = GetTarget();
+
     Unit::AuraList const& auras = caster->GetAurasByType(SPELL_AURA_ABILITY_PERIODIC_CRIT);
     for(Unit::AuraList::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
     {
@@ -7862,11 +7865,11 @@ bool Aura::IsCritFromAbilityAura(Unit* caster, uint32& damage)
     }
 
     // Special exception for Rupture spell, damage can crit after patch 3.3.3
-    if (m_spellProto->SpellFamilyName == SPELLFAMILY_ROGUE && m_spellProto->SpellFamilyFlags & UI64LIT(0x000000000000100000))
+    if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_ROGUE && GetSpellProto()->SpellFamilyFlags & UI64LIT(0x000000000000100000))
     {
-        if(caster->IsSpellCrit(m_target, m_spellProto, GetSpellSchoolMask(m_spellProto)))
+        if(caster->IsSpellCrit(target, GetSpellProto(), GetSpellSchoolMask(GetSpellProto())))
         {
-            damage = caster->SpellCriticalDamageBonus(m_spellProto, damage, m_target);
+            damage = caster->SpellCriticalDamageBonus(GetSpellProto(), damage, target);
             return true;
         }
     }
