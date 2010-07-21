@@ -402,23 +402,21 @@ Spell::Spell( Unit* caster, SpellEntry const *info, bool triggered, ObjectGuid o
     // determine reflection
     m_canReflect = false;
 
-    // AoE spells, spells with non-magic DmgClass or SchoolMask or with SPELL_ATTR_EX2_CANT_REFLECTED cannot be reflected
-    if (m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MAGIC &&
-        m_spellInfo->SchoolMask != SPELL_SCHOOL_MASK_NORMAL &&
-        !(m_spellInfo->AttributesEx2 & SPELL_ATTR_EX2_CANT_REFLECTED) &&
-        !IsAreaOfEffectSpell(m_spellInfo))
+    if(m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MAGIC && !(m_spellInfo->AttributesEx2 & SPELL_ATTR_EX2_CANT_REFLECTED))
     {
         for(int j = 0; j < MAX_EFFECT_INDEX; ++j)
         {
             if (m_spellInfo->Effect[j] == 0)
                 continue;
 
-            if(IsPositiveTarget(m_spellInfo->EffectImplicitTargetA[j], m_spellInfo->EffectImplicitTargetB[j]) && !(m_spellInfo->AttributesEx & SPELL_ATTR_EX_NEGATIVE))
-                continue;
-            else
+            if(!IsPositiveTarget(m_spellInfo->EffectImplicitTargetA[j], m_spellInfo->EffectImplicitTargetB[j]))
                 m_canReflect = true;
+            else
+                m_canReflect = (m_spellInfo->AttributesEx & SPELL_ATTR_EX_NEGATIVE) ? true : false;
 
             if(m_canReflect)
+                continue;
+            else
                 break;
         }
     }
@@ -1521,8 +1519,8 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
     else
         radius = GetSpellMaxRange(sSpellRangeStore.LookupEntry(m_spellInfo->rangeIndex));
 
-    if (!radius && targetMode == TARGET_ALL_ENEMY_IN_AREA)
-        radius = DEFAULT_VISIBILITY_DISTANCE * 3; //Some spells have radius=0, but 100% should have huge damage area.
+//    if (!radius && targetMode == TARGET_ALL_ENEMY_IN_AREA)
+//        radius = DEFAULT_VISIBILITY_DISTANCE * 3; //Some spells have radius=0, but 100% should have huge damage area.
 		
     uint32 EffectChainTarget = m_spellInfo->EffectChainTarget[effIndex];
 
