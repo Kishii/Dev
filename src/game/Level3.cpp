@@ -5452,8 +5452,8 @@ bool ChatHandler::HandleGMFlyCommand(const char* args)
         target = m_session->GetPlayer();
 
     WorldPacket data(12);
-    {
     if (strncmp(args, "on", 3) == 0)
+	{
         data.SetOpcode(SMSG_MOVE_SET_CAN_FLY);
         ((Player*)(target))->SetCanFly(true);
     }
