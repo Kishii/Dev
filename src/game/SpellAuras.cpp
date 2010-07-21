@@ -7740,6 +7740,7 @@ void Aura::HandleAuraConvertRune(bool apply, bool Real)
         {
             if(plr->GetCurrentRune(i) == runeTo && plr->GetBaseRune(i) == runeFrom)
             {
+				plr->ConvertRune(i, plr->GetBaseRune(i));
                 plr->ClearConvertedBy(i);
                 break;
             }
