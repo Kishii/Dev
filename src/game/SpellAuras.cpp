@@ -6525,12 +6525,15 @@ void Aura::PeriodicTick()
         case SPELL_AURA_PERIODIC_DAMAGE_PERCENT:
         {
             // don't damage target if not alive, possible death persistent effects
-            if (!target->isAlive())
+            if (!m_target->IsInWorld() ||  !m_target->isAlive())
                 return;
 
             Unit *pCaster = GetCaster();
             if(!pCaster)
                 return;
+			
+			if(!pCaster->IsInWorld() || !pCaster->isAlive())
+				return;
 
             if( spellProto->Effect[GetEffIndex()] == SPELL_EFFECT_PERSISTENT_AREA_AURA &&
                 pCaster->SpellHitResult(target, spellProto, false) != SPELL_MISS_NONE)
