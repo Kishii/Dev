@@ -8721,6 +8721,10 @@ int32 Unit::CalculateSpellDamage(Unit const* target, SpellEntry const* spellProt
     if(comboDamage != 0 && unitPlayer && target && (target->GetGUID() == unitPlayer->GetComboTarget()))
         value += (int32)(comboDamage * comboPoints);
 
+    // Magic Absorption always misses 1 point
+    if(spellProto->Id == 29444 && effect_index == EFFECT_INDEX_1)
+        value += spellProto->EffectRealPointsPerLevel[EFFECT_INDEX_1];
+		
     if(Player* modOwner = GetSpellModOwner())
     {
         modOwner->ApplySpellMod(spellProto->Id, SPELLMOD_ALL_EFFECTS, value);
