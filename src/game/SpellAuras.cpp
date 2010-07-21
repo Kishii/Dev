@@ -2628,6 +2628,22 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             }
             break;
         }
+        case SPELLFAMILY_ROGUE:
+            // Honor Among Thieves 
+            if (GetSpellProto()->Id == 52916) 
+            { 
+               // prevent multiple casting of 51699 
+               if (GetTarget()->GetGUID() != GetCasterGUID()) 
+                   return; 
+               Unit *caster = GetCaster(); 
+               Unit *unitVictim = NULL; 
+               if (caster && caster->GetTypeId() == TYPEID_PLAYER) 
+                   unitVictim = ObjectAccessor::GetUnit(*caster,((Player*)caster)->GetComboTarget()); 
+               // roll proc chance 
+               if (unitVictim && roll_chance_i(m_modifier.m_amount)) 
+                   caster->CastSpell(unitVictim, 51699, true); 
+            }
+            break;
         case SPELLFAMILY_HUNTER:
             break;
         case SPELLFAMILY_PALADIN:
