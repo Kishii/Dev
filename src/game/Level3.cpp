@@ -5457,7 +5457,7 @@ bool ChatHandler::HandleGMFlyCommand(const char* args)
         data.SetOpcode(SMSG_MOVE_SET_CAN_FLY);
         ((Player*)(target))->SetCanFly(true);
     }
-    if (strncmp(args, "off", 4) == 0)
+    else if (strncmp(args, "off", 4) == 0)
     {
         data.SetOpcode(SMSG_MOVE_UNSET_CAN_FLY);
         ((Player*)(target))->SetCanFly(false);
