@@ -1377,6 +1377,9 @@ Death.Bones.BattlegroundOrArena = 1
 #        The time in which premade group of 1 faction waits in BG Queue for premade group of other faction
 #        Default: 1800000 (30 minutes)
 #                 0 - disable (not recommended)
+#    BattleGround.Random.ResetHour	
+#        Hour when random bg reset (0..23)	
+#        Default: 6
 #
 ###################################################################################################################
 
@@ -1386,6 +1389,7 @@ Battleground.QueueAnnouncer.Start = 0
 Battleground.InvitationType = 0
 BattleGround.PrematureFinishTimer = 300000
 BattleGround.PremadeGroupWaitForMatch = 1800000
+BattleGround.Random.ResetHour = 6
 
 ###################################################################################################################
 # ARENA CONFIG

@@ -99,6 +99,7 @@ void WorldSession::HandleBattlemasterJoinOpcode( WorldPacket & recv_data )
 
     // can do this, since it's battleground, not arena
     BattleGroundQueueTypeId bgQueueTypeId = BattleGroundMgr::BGQueueTypeId(bgTypeId, 0);
+    BattleGroundQueueTypeId bgQueueTypeIdRandom = BattleGroundMgr::BGQueueTypeId(BATTLEGROUND_RB, 0);
 
     // ignore if player is already in BG
     if (_player->InBattleGround())
@@ -133,6 +134,43 @@ void WorldSession::HandleBattlemasterJoinOpcode( WorldPacket & recv_data )
             _player->GetSession()->SendPacket(&data);
             return;
         }
+        
+        if (_player->GetBattleGroundQueueIndex(bgQueueTypeIdRandom) < PLAYER_MAX_BATTLEGROUND_QUEUES)
+        {
+            //player is already in random queue
+            WorldPacket data;
+            sBattleGroundMgr.BuildGroupJoinedBattlegroundPacket(&data, ERR_IN_RANDOM_BG);	
+            _player->GetSession()->SendPacket(&data);
+            return;	
+        }	
+        
+        if(_player->InBattleGroundQueue() && bgTypeId == BATTLEGROUND_RB)
+        {
+            //player is already in queue, can't start random queue
+            WorldPacket data;
+            sBattleGroundMgr.BuildGroupJoinedBattlegroundPacket(&data, ERR_IN_NON_RANDOM_BG);
+            _player->GetSession()->SendPacket(&data);
+            return;
+        }	
+         // check if already in queue	
+         if (_player->GetBattleGroundQueueIndex(bgQueueTypeId) < PLAYER_MAX_BATTLEGROUND_QUEUES	
+             //player is already in this queue
+139	159	
+             return;
+ 	160	
++
+140	161	
+         // check if has free queue slots
+141	162	
+         if (!_player->HasFreeBattleGroundQueueId())
+ 	163	
++        {
+ 	164	
++            WorldPacket data;
+ 	165	
++            sBattleGroundMgr.BuildGroupJoinedBattlegroundPacket(&data, ERR_BATTLEGROUND_TOO_MANY_QUEUES);
+ 	166	
++            _player->GetSession()->SendPacket(&data);
 
         // check if already in queue
         if (_player->GetBattleGroundQueueIndex(bgQueueTypeId) < PLAYER_MAX_BATTLEGROUND_QUEUES)
@@ -141,7 +179,14 @@ void WorldSession::HandleBattlemasterJoinOpcode( WorldPacket & recv_data )
 			
         // check if has free queue slots
         if (!_player->HasFreeBattleGroundQueueId())
+        {
+
+            WorldPacket data;
+
+            sBattleGroundMgr.BuildGroupJoinedBattlegroundPacket(&data, ERR_BATTLEGROUND_TOO_MANY_QUEUES);	
+            _player->GetSession()->SendPacket(&data);
             return;
+        }
     }
     else
     {
@@ -222,7 +267,7 @@ void WorldSession::HandleBattleGroundPlayerPositionsOpcode( WorldPacket & /*recv
     if(!bg)                                                 // can't be received if player not in battleground
         return;
 
-    switch( bg->GetTypeID() )
+    switch( bg->GetTypeID(true) )
     {
         case BATTLEGROUND_WS:
             {
