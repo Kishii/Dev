@@ -7948,12 +7948,14 @@ void Aura::HandleAllowOnlyAbility(bool apply, bool Real)
         target->setAttackTimer(BASE_ATTACK,m_duration);
         target->setAttackTimer(RANGED_ATTACK,m_duration);
         target->setAttackTimer(OFF_ATTACK,m_duration);
+        target->SetFlag(PLAYER_FLAGS,PLAYER_FLAGS_UNK24);
     }
     else
     {
         target->resetAttackTimer(BASE_ATTACK);
         target->resetAttackTimer(RANGED_ATTACK);
         target->resetAttackTimer(OFF_ATTACK);
+        target->RemoveFlag(PLAYER_FLAGS,PLAYER_FLAGS_UNK24);
     }
 
     target->UpdateDamagePhysical(BASE_ATTACK);
@@ -8536,6 +8538,13 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
                 else
                     return;
                 break;
+            }
+            else if (m_spellProto->SpellFamilyFlags & 0x20LL && GetSpellProto()->SpellVisual[0] == 13)	
+            {	
+                // Glyph of Frostbolt	
+                if (Unit * caster = GetCaster())	
+                    if (caster->HasAura(56370))	
+                        m_target->RemoveAurasByCasterSpell(GetId(), caster->GetGUID());	
             }
 
             switch(GetId())
