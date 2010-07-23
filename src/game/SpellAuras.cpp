@@ -3922,10 +3922,9 @@ void Aura::HandleAuraModStun(bool apply, bool Real)
             return;
         }
     }
-}
-	
+
     // Seduction (Succubus spell)	
-    if (m_spellProto->Id == 6358)	
+    if (GetSpellProto()->Id == 6358)	
     {	
         Unit* pCaster = GetCaster();	
         if (!pCaster)	
@@ -3943,7 +3942,7 @@ void Aura::HandleAuraModStun(bool apply, bool Real)
                 }	
         }	
     }
- }
+}
 
 void Aura::HandleModStealth(bool apply, bool Real)
 {

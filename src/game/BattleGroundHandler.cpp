@@ -151,18 +151,7 @@ void WorldSession::HandleBattlemasterJoinOpcode( WorldPacket & recv_data )
             sBattleGroundMgr.BuildGroupJoinedBattlegroundPacket(&data, ERR_IN_NON_RANDOM_BG);
             _player->GetSession()->SendPacket(&data);
             return;
-        }	
-         // check if already in queue	
-         if (_player->GetBattleGroundQueueIndex(bgQueueTypeId) < PLAYER_MAX_BATTLEGROUND_QUEUES	
-             //player is already in this queue	
-             return;
-
-         // check if has free queue slots	
-         if (!_player->HasFreeBattleGroundQueueId())
-        {
-            WorldPacket data;	
-            sBattleGroundMgr.BuildGroupJoinedBattlegroundPacket(&data, ERR_BATTLEGROUND_TOO_MANY_QUEUES);
-            _player->GetSession()->SendPacket(&data);
+        }
 
         // check if already in queue
         if (_player->GetBattleGroundQueueIndex(bgQueueTypeId) < PLAYER_MAX_BATTLEGROUND_QUEUES)
@@ -172,9 +161,7 @@ void WorldSession::HandleBattlemasterJoinOpcode( WorldPacket & recv_data )
         // check if has free queue slots
         if (!_player->HasFreeBattleGroundQueueId())
         {
-
             WorldPacket data;
-
             sBattleGroundMgr.BuildGroupJoinedBattlegroundPacket(&data, ERR_BATTLEGROUND_TOO_MANY_QUEUES);	
             _player->GetSession()->SendPacket(&data);
             return;

@@ -635,7 +635,6 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                         if (Player* modOwner = m_caster->GetSpellModOwner())
                             modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_DAMAGE, damage);
                      }
-                    }
                 }
                 // Gouge
                 else if (m_spellInfo->SpellFamilyFlags & UI64LIT(0x0000000000000008))
@@ -767,15 +766,6 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                 else if (m_spellInfo->SpellFamilyFlags & UI64LIT(0x0010000000000000))
                 {
                     damage+=int32(m_caster->GetShieldBlockValue());
-                }
-                // Judgement
-                else if (m_spellInfo->Id == 54158)
-                {
-                    // [1 + 0.25 * SPH + 0.16 * AP]
-                    float ap = m_caster->GetTotalAttackPowerValue(BASE_ATTACK);
-                    int32 holy = m_caster->SpellBaseDamageBonus(GetSpellSchoolMask(m_spellInfo)) +
-                                 m_caster->SpellBaseDamageBonusForVictim(GetSpellSchoolMask(m_spellInfo), unitTarget);
-                    damage += int32(ap * 0.16f) + int32(holy * 25 / 100);
                 }
                 break;
             }
@@ -5345,15 +5335,6 @@ void Spell::EffectWeaponDmg(SpellEffectIndex eff_idx)
                 m_caster->HasAura(58657) )
             {
                 totalDamagePercentMod *= 1.2f;
-            }
-            // Rune strike
-            if( m_spellInfo->SpellIconID == 3007)
-            {
-                int32 count = CalculateDamage(EFFECT_INDEX_2, unitTarget);
-                spell_bonus += int32(count * m_caster->GetTotalAttackPowerValue(BASE_ATTACK) / 100.0f);
-				
-                if( Aura * pAura = m_caster->GetAura(56816, EFFECT_INDEX_0))
-                    pAura->SendFakeAuraUpdate(56817, true);
             }
             break;
         }

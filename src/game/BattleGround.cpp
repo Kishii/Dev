@@ -742,10 +742,6 @@ void BattleGround::EndBattleGround(uint32 winner)
             //if rated arena match - make member lost!
             if (isArena() && isRated() && winner_arena_team && loser_arena_team)
             {
-                +        uint32 win_kills = plr->GetRandomWinner() ? BG_REWARD_WINNER_HONOR_LAST : BG_REWARD_WINNER_HONOR_FIRST;
-        uint32 loos_kills = plr->GetRandomWinner() ? BG_REWARD_LOOSER_HONOR_LAST : BG_REWARD_LOOSER_HONOR_FIRST;
-        uint32 win_arena = plr->GetRandomWinner() ? BG_REWARD_WINNER_ARENA_LAST : BG_REWARD_WINNER_ARENA_FIRST;
-
                 if (team == winner)
                     winner_arena_team->OfflineMemberLost(itr->first, loser_rating);
                 else
@@ -799,6 +795,10 @@ void BattleGround::EndBattleGround(uint32 winner)
                 plr->GetAchievementMgr().ResetAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_RATED_ARENA, ACHIEVEMENT_CRITERIA_CONDITION_NO_LOOSE);
             }
         }
+
+        uint32 win_kills = plr->GetRandomWinner() ? BG_REWARD_WINNER_HONOR_LAST : BG_REWARD_WINNER_HONOR_FIRST;
+        uint32 loos_kills = plr->GetRandomWinner() ? BG_REWARD_LOOSER_HONOR_LAST : BG_REWARD_LOOSER_HONOR_FIRST;
+        uint32 win_arena = plr->GetRandomWinner() ? BG_REWARD_WINNER_ARENA_LAST : BG_REWARD_WINNER_ARENA_FIRST;
 
         if (team == winner)
         {
@@ -863,7 +863,7 @@ uint32 BattleGround::GetBonusHonorFromKill(uint32 kills) const
 
 uint32 BattleGround::GetBattlemasterEntry() const
 {
-    switch(GetTypeID(ture))
+    switch(GetTypeID(true))
     {
         case BATTLEGROUND_AV: return 15972;
         case BATTLEGROUND_WS: return 14623;

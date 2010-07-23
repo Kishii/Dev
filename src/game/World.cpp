@@ -2133,7 +2133,8 @@ void World::ResetWeeklyQuests()
     CharacterDatabase.PExecute("UPDATE saved_variables SET NextWeeklyQuestResetTime = '"UI64FMTD"'", uint64(m_NextWeeklyQuestReset));
 }
 
-void World::ResetRandomBG()	+{	
+void World::ResetRandomBG()	
+{	
     sLog.outDetail("Random BG status reset for all characters.");	
     CharacterDatabase.Execute("DELETE FROM character_battleground_random");	
     for(SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)	
