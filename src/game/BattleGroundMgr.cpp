@@ -1500,7 +1500,7 @@ BattleGround * BattleGroundMgr::CreateNewBattleGround(BattleGroundTypeId bgTypeI
     
     bool isRandom = false;
     BattleGroundTypeId bgRandomTypeId = BattleGroundTypeId(0);	
-+	
+	
     if(bgTypeId==BATTLEGROUND_RB)	
     {	
         BattleGroundTypeId random_bgs[] = {BATTLEGROUND_AV, BATTLEGROUND_WS, BATTLEGROUND_AB, BATTLEGROUND_EY/*, BATTLEGROUND_SA, BATTLEGROUND_IC*/};	
