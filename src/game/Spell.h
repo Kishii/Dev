@@ -27,6 +27,8 @@
 #include "Unit.h"
 #include "Player.h"
 
+#define MAX_SPELL_ID	100000
+
 class WorldSession;
 class WorldPacket;
 class DynamicObj;

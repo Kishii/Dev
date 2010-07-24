@@ -1865,7 +1865,7 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
 						
 					// Hardened Skin and Devotion Aura (multi-family check)
 					if (spellInfo_1->Id == 71586 && spellInfo_2->SpellIconID == 291)
-						return;
+						return false;
 					
 					// Aegis and Holy Shield (multi-family check)
 					if (spellInfo_1->Id == 67631 && spellInfo_2->SpellIconID == 453)

@@ -143,9 +143,6 @@ bool ChatHandler::HandleNameAnnounceCommand(const char* args)
 
     switch(m_session->GetSecurity())
     {
-      case SEC_MODERATOR:
-        strid = LANG_SYSTEMMESSAGE_MODERATOR;
-        break;
       case SEC_GAMEMASTER:
         strid = LANG_SYSTEMMESSAGE_GAMEMASTER;
         break;
