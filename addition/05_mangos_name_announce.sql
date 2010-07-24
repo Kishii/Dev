@@ -1,0 +1,2 @@
+INSERT INTO `command` VALUES ('nameannounce',6,'Syntax: .nameannounce $MessageToBroadcast\r\n\r\nSend a global message to all players online in chat log with colored sender\'s name.');
+INSERT INTO `mangos_string` VALUES (65,'|c1f40af20 < Maître de jeu >|cffff0000[%s]|c1f40af20 announce:|cffffff00 %s|r',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL), (66,'|c1f40af20 < Administrateur >|cffff0000[%s]|c1f40af20 announce:|cffffff00 %s|r',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
