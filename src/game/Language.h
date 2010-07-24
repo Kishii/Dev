@@ -88,6 +88,8 @@ enum MangosStrings
     LANG_RA_PASS                        = 62,
     LANG_GM_ACCEPTS_WHISPER             = 63,
     LANG_GM_NO_WHISPER                  = 64,
+    LANG_SYSTEMMESSAGE_GAMEMASTER       = 65,
+    LANG_SYSTEMMESSAGE_ADMINISTRATOR    = 66,	
     // Room for more level 0              65-99 not used
 
     // level 1 chat

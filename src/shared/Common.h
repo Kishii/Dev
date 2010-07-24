@@ -178,7 +178,7 @@ enum AccountTypes
 	SEC_ARGENT		   = 2,		// Compte ARGENT ( spawn Pnj ).
 	SEC_OR		   	   = 3,		// Compte OR ( spawn Pnj,gomeobject ).
 	SEC_PRENIUM	 	   = 4,		// Compte PRENIUM ( Vip Or ).
-	SEC_MODERATOR	   = 5,		// Animateur d'events.
+	SEC_MODERATOR	   = 5,		// Compte CATACLYSM.
 	SEC_GAMEMASTER     = 6,		// Maître de jeu.
 	SEC_ADMINISTRATOR  = 7,		// Administrateur
 	SEC_CONSOLE        = 8      // Console
