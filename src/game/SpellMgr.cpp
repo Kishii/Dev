@@ -1786,6 +1786,16 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
                     // Arcane Intellect and Insight
                     if( spellInfo_2->SpellIconID == 125 && spellInfo_1->Id == 18820 )
                         return false;
+            
+					// Arcane Missiles and Moonfire
+					if( spellInfo_2->SpellFamilyName == SPELLFAMILY_DRUID )
+						if( spellInfo_1->SpellIconID == 225 && spellInfo_2->SpellIconID == 225)
+						return false;
+						
+                    //Mirror image frostbolt and mage frostbolt
+                    if( spellInfo_2->SpellIconID == 188 && spellInfo_1->Id == 59638 )
+                        return false;
+
                     break;
                 case SPELLFAMILY_WARRIOR:
                 {
@@ -1809,6 +1819,11 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
                     if (spellId_1 == 40216 && spellId_2 == 42016 )
                         return false;
 
+					// Arcane Missiles and Moonfire
+					if( spellInfo_2->SpellFamilyName == SPELLFAMILY_MAGE )
+					    if( spellInfo_1->SpellIconID == 225 && spellInfo_2->SpellIconID == 225)
+						    return false;
+						
                     break;
                 }
                 case SPELLFAMILY_ROGUE:
@@ -1847,6 +1862,10 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
 					// Seal of Command and Frostforged Champion (multi-family check)
 					if (spellInfo_1->Id == 72412 && spellInfo_2->SpellIconID == 561)
 						return false;
+						
+					// Hardened Skin and Devotion Aura (multi-family check)
+					if (spellInfo_1->Id == 71586 && spellInfo_2->SpellIconID == 291)
+						return;
 
                     break;
                 }
@@ -2040,6 +2059,12 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
             if (spellId_1 == 42016 && spellId_2 == 40216 )
                 return false;
 
+         
+			// Arcane Missiles and Moonfire
+			if( spellInfo_2->SpellFamilyName == SPELLFAMILY_MAGE )
+				if( spellInfo_1->SpellIconID == 225 && spellInfo_2->SpellIconID == 225)
+				return false;
+				
             break;
         case SPELLFAMILY_ROGUE:
             if( spellInfo_2->SpellFamilyName == SPELLFAMILY_ROGUE )
@@ -2155,8 +2180,15 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
       
 			// Seal of Command and Frostforged Champion (multi-family check)
 			if( spellInfo_2->SpellFamilyName == SPELLFAMILY_GENERIC )
+			{ 
+                // Seal of Command and Frostforged Champion (multi-family check) 
 				if( spellInfo_1->SpellIconID == 561 && spellInfo_2->Id == 72412 )
 				return false;
+
+				// Hardened Skin and Devotion Aura (multi-family check)
+				if( spellInfo_1->SpellIconID == 291 && spellInfo_2->Id == 71586 )
+				return false;
+			}    
 
             break;
         case SPELLFAMILY_SHAMAN:
