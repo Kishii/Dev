@@ -2503,6 +2503,83 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         target->CastCustomSpell(caster, 48210, &bp0, NULL, NULL, true, NULL, this);
                 }
             }
+            // Eye of Kilrogg
+            else if(GetId() == 126)
+            {
+                
+                if(!GetCaster() || GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                    return;
+                Player* caster = (Player*)GetCaster();
+                if(apply)
+                {
+                    if(Pet *eye = caster->FindGuardianWithEntry(GetSpellProto()->EffectMiscValue[EFFECT_INDEX_0]))
+                    {
+                        eye->addUnitState(UNIT_STAT_CONTROLLED);
+
+                        eye->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
+
+                        eye->SetCharmerGUID(caster->GetGUID());
+                        eye->setFaction(caster->getFaction());
+
+                        caster->SetCharm(eye);
+
+                        caster->GetCamera().SetView(eye);
+                        caster->SetClientControl(eye, 1);
+                        caster->SetMover(eye);
+
+                        eye->CombatStop(true);
+                        eye->DeleteThreatList();
+                        eye->getHostileRefManager().deleteReferences();
+
+                        if(CharmInfo *charmInfo = eye->InitCharmInfo(target))
+                        {
+                            charmInfo->InitPossessCreateSpells();
+                            charmInfo->SetReactState(REACT_PASSIVE);
+                            charmInfo->SetCommandState(COMMAND_STAY);
+                        }
+
+                        caster->PossessSpellInitialize();
+                        eye->AIM_Initialize();
+                        eye->SetSpeedRate(MOVE_RUN, 2.0f, true);
+                        //Glyph of kilrogg
+                        if(caster->HasAura(58081))
+                        {
+                            eye->SetSpeedRate(MOVE_RUN, 2.5f, true);
+                            uint32 zone, area;
+                            caster->GetZoneAndAreaId(zone, area);
+                            if(caster->GetMapId() == 530 || caster->GetMapId() == 571)
+                            {
+                                eye->SetSpeedRate(MOVE_FLIGHT, 2.5f, true);
+                                WorldPacket data(SMSG_MOVE_SET_CAN_FLY, 12);
+                                data << eye->GetPackGUID();
+                                data << uint32(1);
+                                caster->SendMessageToSet(&data,true);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if(Pet *eye = caster->FindGuardianWithEntry(GetSpellProto()->EffectMiscValue[EFFECT_INDEX_0]))
+                    {
+                        caster->RemoveGuardian(eye);
+                        eye->CombatStop();
+                        eye->AddObjectToRemoveList();
+                    }
+                    caster->InterruptSpell(CURRENT_CHANNELED_SPELL);  // the spell is not automatically canceled when interrupted, do it now
+                    caster->SetCharm(NULL);
+
+                    caster->GetCamera().ResetView();
+                    caster->SetClientControl(caster, 1);
+                    caster->SetMover(NULL);
+
+                    caster->RemovePetActionBar();
+
+                    // on delete only do caster related effects
+                    if(m_removeMode == AURA_REMOVE_BY_DELETE)
+                        return;
+                }
+            }
             break;
         }
         case SPELLFAMILY_PRIEST:
