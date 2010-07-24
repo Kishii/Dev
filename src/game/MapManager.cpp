@@ -216,20 +216,18 @@ bool MapManager::CanPlayerEnter(uint32 mapid, Player* player)
             else
             {
                 DEBUG_LOG("Map::CanEnter - player '%s' is dead but doesn't have a corpse!", player->GetName());
-            }
+			}
         }
-
-        // TODO: move this to a map dependent location
-        /*if(i_data && i_data->IsEncounterInProgress())
-        {
-            DEBUG_LOG("MAP: Player '%s' can't enter instance '%s' while an encounter is in progress.", player->GetName(), GetMapName());
-            player->SendTransferAborted(GetId(), TRANSFER_ABORT_ZONE_IN_COMBAT);
-            return(false);
-        }*/
-        return true;
-    }
+        player->Unmount();
+		player->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
+		return true;
+	}
     else
-        return true;
+	{
+		player->Unmount();
+		player->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
+		return true:
+	}  
 }
 
 void MapManager::DeleteInstance(uint32 mapid, uint32 instanceId)
