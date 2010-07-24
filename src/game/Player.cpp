@@ -8514,6 +8514,10 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
     FillInitialWorldState(data, count, 0xC77, sWorld.getConfig(CONFIG_BOOL_ARENA_SEASON_IN_PROGRESS));
                                                             // 8 Arena season id
     FillInitialWorldState(data, count, 0xF3D, sWorld.getConfig(CONFIG_UINT32_ARENA_SEASON_ID));
+                                                            // 9 0 - WG in progress, 1 - otherwise
+    FillInitialWorldState(data, count, 0xED9, 0x1);
+                                                            // 10 WG Timer in seconds
+    FillInitialWorldState(data, count, 0x1102, uint32(time(NULL) + 9000));
 
     if(mapid == 530)                                        // Outland
     {
