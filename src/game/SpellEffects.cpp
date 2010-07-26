@@ -1703,6 +1703,14 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     else                                    // Knocked Up   - backfire 5%
                         m_caster->CastSpell(m_caster, 46014, true, m_CastItem);
 
+                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
+                    {
+                        Player* player = (Player*)m_caster;
+
+                        if (BattleGround *bg = player->GetBattleGround())
+                            bg->EventPlayerDroppedFlag(player);
+                    }
+
                     return;
                 }
                 case 55818:                                 // Hurl Boulder
@@ -5600,7 +5608,9 @@ void Spell::EffectInterruptCast(SpellEffectIndex eff_idx)
             // check if we can interrupt spell
             if ((curSpellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_INTERRUPT) && curSpellInfo->PreventionType == SPELL_PREVENTION_TYPE_SILENCE )
             {
-                unitTarget->ProhibitSpellSchool(GetSpellSchoolMask(curSpellInfo), unitTarget->CalculateSpellDuration(m_spellInfo, eff_idx, unitTarget));
+                uint32 interruptDuration = unitTarget->CalculateSpellDuration(m_caster, GetSpellDuration(m_spellInfo), m_spellInfo, eff_idx);
+
+                unitTarget->ProhibitSpellSchool(GetSpellSchoolMask(curSpellInfo), interruptDuration);
                 unitTarget->InterruptSpell(CurrentSpellTypes(i),false);
             }
         }
