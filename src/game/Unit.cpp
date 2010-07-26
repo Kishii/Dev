@@ -1853,24 +1853,19 @@ uint32 Unit::CalcArmorReducedDamage(Unit* pVictim, const uint32 damage)
 
     // Apply Player CR_ARMOR_PENETRATION rating and percent talents
     if (GetTypeId()==TYPEID_PLAYER)
-    { 
-        // calculate Armor Penetration constant 
-        float targetLevel = (float)pVictim->getLevel(); 
-        float arPenConstant = 400.0f + 85.0f * targetLevel; 
-        if (targetLevel > 59.0f) 
-            arPenConstant += 382.5f * (targetLevel - 59.0f); // 85.0f * 4.5f = 382.5f 
-        // calculate  Armor Penetration cap 
-        float armorReduction = (armor + arPenConstant) / 3.0f; 
-        if (armor < armorReduction) 
-            armorReduction = armor; 
- 
-        float armorPenetrationCoeff = ((Player*)this)->GetArmorPenetrationPct() / 100.0f; 
- 
-        if (armorPenetrationCoeff > 1.0f) 
-            armorPenetrationCoeff = 1.0f; 
- 
-        armorReduction *= armorPenetrationCoeff; 
-        armor -= armorReduction; 
+    {
+        float maxArmorPen = 0.0f;
+        uint32 targetLevel = pVictim->getLevel();
+
+        if (getLevel() < 60)
+            maxArmorPen = 400+85*targetLevel;
+        else
+            maxArmorPen = 400+85*targetLevel+4.5f*85*(targetLevel-59);
+
+        maxArmorPen = std::min((armor+maxArmorPen)/3, armor);
+        float armorPen = maxArmorPen * ((Player*)this)->GetArmorPenetrationPct() / 100.0f;
+
+        armor -= armorPen;
     }
 
     if (armor < 0.0f)
