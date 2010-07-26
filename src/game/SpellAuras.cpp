@@ -3126,7 +3126,7 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
                 }
                 // Shadow Dance - apply stealth mode stand flag
                 case FORM_SHADOW_DANCE:
-                    m_target->SetStandFlags(UNIT_STAND_FLAGS_CREEP);
+                    target->SetStandFlags(UNIT_STAND_FLAGS_CREEP);
                     break;
                 default:
                     break;
@@ -3170,7 +3170,7 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
                 break;
             // Shadow Dance - remove stealth mode stand flag
             case FORM_SHADOW_DANCE:
-                m_target->RemoveStandFlags(UNIT_STAND_FLAGS_CREEP);
+                target->RemoveStandFlags(UNIT_STAND_FLAGS_CREEP);
                 break;
             default:
                 break;
