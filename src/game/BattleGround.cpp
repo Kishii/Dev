@@ -460,8 +460,29 @@ void BattleGround::Update(uint32 diff)
                 //TODO : add arena sound PlaySoundToAll(SOUND_ARENA_START);
 
                 for(BattleGroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end(); ++itr)
+                {
                     if (Player *plr = sObjectMgr.GetPlayer(itr->first))
+                    {
                         plr->RemoveAurasDueToSpell(SPELL_ARENA_PREPARATION);
+
+                        Unit::AuraMap &auras = plr->GetAuras();
+
+                        // Remove all positive auras with duration less than 25s
+                        for (Unit::AuraMap::iterator itr = auras.begin(); itr != auras.end();)
+                        {
+                            if (itr->second && itr->second->GetAuraDuration() > 0 && itr->second->GetAuraDuration() < 25000 &&
+                                itr->second->IsPositive() &&
+                                !itr->second->IsPermanent() &&
+                                !itr->second->IsPassive())
+                                plr->RemoveAura(itr);
+                            else
+                                ++itr;
+                        }
+
+                        plr->SetPower(POWER_RAGE, 0);
+                        plr->SetPower(POWER_RUNIC_POWER, 0);
+                    }
+                }
 
                 CheckArenaWinConditions();
             }
