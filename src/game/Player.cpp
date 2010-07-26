@@ -8570,8 +8570,8 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
                 bg->FillInitialWorldStates(data, count);
             else
             {
-                FillInitialWorldState(data,count,0xa0f,0x0);// 7
-                FillInitialWorldState(data,count,0xa10,0x0);// 8
+                FillInitialWorldState(data,count,0xe11,0x0);// 7 gold
+                FillInitialWorldState(data,count,0xe10,0x0);// 8 green
                 FillInitialWorldState(data,count,0xa11,0x0);// 9 show
             }
             break;
@@ -8580,8 +8580,8 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
                 bg->FillInitialWorldStates(data, count);
             else
             {
-                FillInitialWorldState(data,count,0x9f0,0x0);// 7 gold
-                FillInitialWorldState(data,count,0x9f1,0x0);// 8 green
+                FillInitialWorldState(data,count,0xe11,0x0);// 7 gold
+                FillInitialWorldState(data,count,0xe10,0x0);// 8 green
                 FillInitialWorldState(data,count,0x9f3,0x0);// 9 show
             }
             break;
@@ -8590,8 +8590,8 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
                 bg->FillInitialWorldStates(data, count);
             else
             {
-                FillInitialWorldState(data,count,0xbb8,0x0);// 7 gold
-                FillInitialWorldState(data,count,0xbb9,0x0);// 8 green
+                FillInitialWorldState(data,count,0xe11,0x0);// 7 gold
+                FillInitialWorldState(data,count,0xe10,0x0);// 8 green
                 FillInitialWorldState(data,count,0xbba,0x0);// 9 show
             }
             break;
