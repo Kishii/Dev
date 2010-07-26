@@ -4457,10 +4457,11 @@ SpellCastResult Spell::CheckCast(bool strict)
         return SPELL_FAILED_CASTER_AURASTATE;
 
     // Caster aura req check if need
-    if(m_spellInfo->casterAuraSpell &&
-        sSpellStore.LookupEntry(m_spellInfo->casterAuraSpell) &&
-        !m_caster->HasAura(m_spellInfo->casterAuraSpell))
+	if(m_spellInfo->casterAuraSpell
+		&& sSpellStore.LookupEntry(m_spellInfo->casterAuraSpell)
+		&& !m_caster->HasAura(m_spellInfo->casterAuraSpell))
         return SPELL_FAILED_CASTER_AURASTATE;
+
     if(m_spellInfo->excludeCasterAuraSpell)
     {
         // Special cases of non existing auras handling
