@@ -632,6 +632,12 @@ bool IsPositiveEffect(uint32 spellId, SpellEffectIndex effIndex)
     SpellEntry const *spellproto = sSpellStore.LookupEntry(spellId);
     if (!spellproto) return false;
 
+	if (spellId == 32375 || spellId == 32592) // mass dispell
+	return true;
+
+	if (spellId == 527 || spellId == 988) // dispell magic
+	return false; 
+	
     switch(spellproto->Effect[effIndex])
     {
         case SPELL_EFFECT_DUMMY:
