@@ -22411,7 +22411,7 @@ void Player::ReportSpam(uint32 reporterGuid)
     if (!GetSession())
         return;
 
-    if (GetSession()->GetSecurity() > SEC_PLAYER)
+    if (GetSession()->GetSecurity() > SEC_MODERATOR)
         return;
 
     if (m_lSpamReporters.find(reporterGuid) != m_lSpamReporters.end())
