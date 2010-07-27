@@ -772,7 +772,6 @@ void Spell::EffectSchoolDMG(SpellEffectIndex effect_idx)
                 {
                     damage+=int32(m_caster->GetShieldBlockValue());
                 }
-                break;
                 // Judgement
                 else if (m_spellInfo->Id == 54158)
                 {
@@ -1702,14 +1701,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         m_caster->CastSpell(m_caster, 54861, true, m_CastItem);
                     else                                    // Knocked Up   - backfire 5%
                         m_caster->CastSpell(m_caster, 46014, true, m_CastItem);
-
-                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
-                    {
-                        Player* player = (Player*)m_caster;
-
-                        if (BattleGround *bg = player->GetBattleGround())
-                            bg->EventPlayerDroppedFlag(player);
-                    }
 
                     return;
                 }
@@ -5614,9 +5605,8 @@ void Spell::EffectInterruptCast(SpellEffectIndex eff_idx)
             // check if we can interrupt spell
             if ((curSpellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_INTERRUPT) && curSpellInfo->PreventionType == SPELL_PREVENTION_TYPE_SILENCE )
             {
-                uint32 interruptDuration = unitTarget->CalculateSpellDuration(m_caster, GetSpellDuration(m_spellInfo), m_spellInfo, eff_idx);
-
-                unitTarget->ProhibitSpellSchool(GetSpellSchoolMask(curSpellInfo), interruptDuration);
+                unitTarget->ProhibitSpellSchool(GetSpellSchoolMask(curSpellInfo), unitTarget->CalculateSpellDuration(m_spellInfo, eff_idx, unitTarget));
+				
                 unitTarget->InterruptSpell(CurrentSpellTypes(i),false);
             }
         }
