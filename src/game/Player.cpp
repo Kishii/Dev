@@ -18,6 +18,7 @@
 
 #include "Common.h"
 #include "Language.h"
+#include "Config/Config.h"
 #include "Database/DatabaseEnv.h"
 #include "Log.h"
 #include "Opcodes.h"
@@ -22402,5 +22403,47 @@ void Player::_LoadRandomBGStatus(QueryResult *result)
     {	
         m_IsBGRandomWinner = true;	
         delete result;	
+    }
+}
+
+void Player::ReportSpam(uint32 reporterGuid)
+{
+    if (!GetSession())
+        return;
+
+    if (GetSession()->GetSecurity() > SEC_PLAYER)
+        return;
+
+    if (m_lSpamReporters.find(reporterGuid) != m_lSpamReporters.end())
+        return;
+
+    int alarmCount = sConfig.GetIntDefault("AntiSpam.AlarmCount", 10);
+
+    if (!alarmCount)
+        return;
+
+    if (m_lSpamReporters.size() + 1 < alarmCount)
+        m_lSpamReporters.insert(reporterGuid);
+    else
+    {
+        // Reset alarms
+        m_lSpamReporters.clear();
+
+        int action = sConfig.GetIntDefault("AntiSpam.Action", 3);
+
+        if (!action)
+            GetSession()->KickPlayer();
+        else
+        {
+            std::string banTime = sConfig.GetStringDefault("AntiSpam.BanTime", "12h");
+            std::string banReason = sConfig.GetStringDefault("AntiSpam.BanReason", "Spam");
+            std::string name = sConfig.GetStringDefault("AntiSpam.Name", "Anti-Spam");
+
+            if (action & 0x2)
+                sWorld.BanAccount(BAN_IP, GetSession()->GetRemoteAddress(), banTime.c_str(), banReason.c_str(), name.c_str());
+
+            if (action & 0x1)
+                sWorld.BanAccount(BAN_CHARACTER, GetName(), banTime.c_str(), banReason.c_str(), name.c_str());
+        }
     }
 }

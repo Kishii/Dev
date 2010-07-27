@@ -51,7 +51,7 @@ mangos_worldd_LDADD = \
 	../../dep/src/g3dlite/libg3dlite.a \
 	../../dep/src/gsoap/libgsoap.a
 
-mangos_worldd_LDFLAGS = -L../../dep/src/g3dlite -L../../dep/src/gsoap -L../bindings/ScriptDev2/ -L$(libdir) $(MANGOS_LIBS) -export-dynamic
+mangos_worldd_LDFLAGS = -L../../dep/src/g3dlite -L../../dep/src/gsoap -L../bindings/universal/ -L$(libdir) $(MANGOS_LIBS) -export-dynamic
 
 ## Additional files to include when running 'make dist'
 #  Include world daemon configuration
