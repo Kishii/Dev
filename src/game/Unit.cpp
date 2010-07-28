@@ -9853,36 +9853,6 @@ void Unit::ProcDamageAndSpellFor( bool isVictim, Unit * pTarget, uint32 procFlag
                     continue;
             }
 			
-			case SPELLFAMILY_DRUID:
-			{
-                // King of the Jungle (Bear and Cat)
-                case 48492: // Rank  1
-                case 48494: // Rank  2
-                case 48495: // Rank  3
-                {
-                    if (!procSpell)
-                        return false;
-                    // Enrage (bear) - single rank - bear miscvalue == 126
-                    if (procSpell->Id == 5229 && triggeredByAura->GetMiscValue() == 126)
-                    {
-                        // note : the remove part is done in spellAuras/HandlePeriodicEnergize as RemoveAurasDueToSpell
-                        basepoints[0] = triggerAmount;
-                        triggered_spell_id = 51185;
-                        target = this;
-                        break;
-                    }
-                    // Tiger Fury (cat) - all ranks - cat miscvalue != 126
-                    if (procSpell->SpellFamilyFlags2 & 0x00000800  && triggeredByAura->GetMiscValue() != 126)
-                    {
-                        basepoints[0] = triggerAmount;
-                        triggered_spell_id = 51178;
-                        target = this;
-                        break;
-                    }
-                    break;
-                }
-			}
-			
             SpellAuraProcResult procResult = (*this.*AuraProcHandler[auraModifier->m_auraname])(pTarget, damage, triggeredByAura, procSpell, procFlag, procExtra, cooldown);
             switch (procResult)
             {

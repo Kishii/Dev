@@ -152,13 +152,13 @@ bool ChatHandler::HandleNameAnnounceCommand(const char* args)
       case SEC_ARGENT:
         strid = LANG_SYSTEMMESSAGE_ARGENT;
         break;
-      case SEC_OR
+      case SEC_OR:
         strid = LANG_SYSTEMMESSAGE_OR;
         break;
-      case SEC_PRENIUM
+      case SEC_PRENIUM:
         strid = LANG_SYSTEMMESSAGE_PRENIUM;
         break;
-      case SEC_MODERATOR
+      case SEC_MODERATOR:
         strid = LANG_SYSTEMMESSAGE_MODERATOR;
         break;
       case SEC_GAMEMASTER:
