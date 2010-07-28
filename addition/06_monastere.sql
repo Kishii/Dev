@@ -1,0 +1,13 @@
+INSERT INTO `mangos_string` VALUES ('603', 'La bataille du monastère va commancer dans 30 secondes, préparer vous !', null, null, null, null, null, null, null, null);
+INSERT INTO `mangos_string` VALUES ('604', 'La bataille du monastère commance !', null, null, null, null, null, null, null, null);
+INSERT INTO `mangos_string` VALUES ('605', '$n à capturer le drapeau de la Horde !', null, null, null, null, null, null, null, null);
+INSERT INTO `mangos_string` VALUES ('606', '$n à capturer le drapeau de l\'Alliance !', null, null, null, null, null, null, null, null);
+INSERT INTO `mangos_string` VALUES ('607', 'Le drapeau de la Horde à été ramasser par $n!', null, null, null, null, null, null, null, null);
+INSERT INTO `mangos_string` VALUES ('608', 'Le drapeau de l\'Alliance à été ramasser par $n!', null, null, null, null, null, null, null, null);
+INSERT INTO `mangos_string` VALUES ('609', 'Le drapeau de l\'Alliance à été ramener a sa base par $n !', null, null, null, null, null, null, null, null);
+INSERT INTO `mangos_string` VALUES ('610', 'Le drapeau de la Horde à été ramener a sa base par $n !', null, null, null, null, null, null, null, null);
+INSERT INTO `mangos_string` VALUES ('611', 'Le drapeau de la Horde à été volé par $n !', null, null, null, null, null, null, null, null);
+INSERT INTO `mangos_string` VALUES ('612', 'Le drapeau de l\'Alliance à été volé par $n !', null, null, null, null, null, null, null, null);
+INSERT INTO `mangos_string` VALUES ('613', 'Les drapeau on été placer à leur bases.', null, null, null, null, null, null, null, null);
+INSERT INTO `mangos_string` VALUES ('614', 'Le drapeau de l\'Alliance à été placer a sa base.', null, null, null, null, null, null, null, null);
+INSERT INTO `mangos_string` VALUES ('615', 'Le drapeau de la Horde à été placer a sa base.', null, null, null, null, null, null, null, null);
