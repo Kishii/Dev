@@ -876,7 +876,6 @@ enum MangosStrings
     //                                    10000-10999
 
     // Use for custom patches             11000-11999
-	LANG_ANNOUNCE_CHEAT                 = 11000,
 	
     LANG_BG_MO_START_ONE_MINUTE         = 11001,
     LANG_BG_MO_START_HALF_MINUTE        = 11002,
