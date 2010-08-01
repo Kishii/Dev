@@ -5570,6 +5570,9 @@ void Player::UpdateWeaponSkill (WeaponAttackType attType)
     if(pVictim && pVictim->IsCharmerOrOwnerPlayerOrPlayerItself())
         return;
 
+	if(pVictim && pVictim->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE ))
+		return;
+		
     if(IsInFeralForm())
         return;                                             // always maximized SKILL_FERAL_COMBAT in fact
 
