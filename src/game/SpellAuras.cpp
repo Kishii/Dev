@@ -3209,7 +3209,12 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
             for (uint32 i = 0; i < 8; ++i)
                 if (ssEntry->spellId[i])
                     ((Player*)target)->removeSpell(ssEntry->spellId[i], false, false, false);
-
+					
+        if (form == FORM_CAT)
+        {
+            if (Aura *pAura = target->GetAura(SPELL_AURA_MOD_INCREASE_SPEED, SPELLFAMILY_DRUID, UI64LIT(0x0), 0x8))
+                target->RemoveAura(pAura);
+        }
     }
 
     // adding/removing linked auras

@@ -8797,8 +8797,8 @@ int32 Unit::CalculateSpellDuration(SpellEntry const* spellProto, SpellEffectInde
 
     if (unitPlayer && target == this)
     {
-        switch(spellProto->SpellFamilyName)
-        {
+		switch(spellProto->SpellFamilyName)
+		{
             case SPELLFAMILY_DRUID:
                 if (spellProto->SpellFamilyFlags & UI64LIT(0x100))
                 {

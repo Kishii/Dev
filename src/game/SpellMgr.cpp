@@ -3607,6 +3607,9 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const *spell
             return map_id == 631 ? SPELL_CAST_OK : SPELL_FAILED_INCORRECT_AREA;
     }
 
+    if (spellInfo->SpellFamilyName == SPELLFAMILY_DRUID && (spellInfo->SpellFamilyFlags2 & 0x8) && form != FORM_CAT)
+        return SPELL_FAILED_ONLY_SHAPESHIFT;
+
     return SPELL_CAST_OK;
 }
 
