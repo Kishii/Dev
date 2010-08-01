@@ -5360,7 +5360,7 @@ void Player::UpdateRating(CombatRating cr)
             break;
         case CR_ARMOR_PENETRATION:
             if(affectStats)
-                UpdateArmorPenetration();
+                UpdateArmorPenetration(amount);
             break;
     }
 }
