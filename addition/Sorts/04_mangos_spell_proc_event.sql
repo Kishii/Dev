@@ -191,3 +191,20 @@ INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `Spell
 DELETE FROM spell_proc_event WHERE entry = 64415;
 INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `SpellFamilyMaskA0`, `SpellFamilyMaskA1`, `SpellFamilyMaskA2`, `SpellFamilyMaskB0`, `SpellFamilyMaskB1`, `SpellFamilyMaskB2`, `SpellFamilyMaskC0`, `SpellFamilyMaskC1`, `SpellFamilyMaskC2`, `procFlags`, `procEx`, `ppmRate`, `CustomChance`, `Cooldown`) VALUES
 (64415, 0x00,  0, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0.000000, 0.000000, 45);
+
+-- Eisige Finger
+DELETE FROM `spell_proc_event` WHERE `entry` IN (44543,44545);
+INSERT INTO `spell_proc_event` VALUES ('44543', '0', '3', '33555104', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '0');
+INSERT INTO `spell_proc_event` VALUES ('44545', '0', '3', '33555104', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '15', '0');
+
+-- DK Todesrunen
+DELETE FROM spell_proc_event WHERE entry IN (49467, 54639, 49208);
+INSERT INTO spell_proc_event VALUES
+(49467, 0, 15, 16, 0, 0, 131072, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(54639, 0, 15, 4194304, 0, 0, 65536, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(49208, 0, 15, 4194304, 0, 0, 65536, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); 
+
+DELETE FROM `spell_proc_event` WHERE `entry` IN (48492,48494,48495);
+INSERT INTO `spell_proc_event` VALUES ('48492', '0', '7', '524288', '0', '2048', '0', '0', '0', '0', '0', '0', '16384', '0', '0', '0', '0');
+INSERT INTO `spell_proc_event` VALUES ('48494', '0', '7', '524288', '0', '2048', '0', '0', '0', '0', '0', '0', '16384', '0', '0', '0', '0');
+INSERT INTO `spell_proc_event` VALUES ('48495', '0', '7', '524288', '0', '2048', '0', '0', '0', '0', '0', '0', '16384', '0', '0', '0', '0');
