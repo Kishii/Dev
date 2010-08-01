@@ -876,8 +876,6 @@ uint32 BattleGround::GetBattlemasterEntry() const
 
 void BattleGround::RewardMark(Player *plr,uint32 count)
 {
-    BattleGroundMarks mark;
-    bool IsSpell;
     switch(GetTypeID(true))
     {
         case BATTLEGROUND_AV:
