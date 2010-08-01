@@ -5329,9 +5329,12 @@ SpellCastResult Spell::CheckCast(bool strict)
             }
             case SPELL_EFFECT_LEAP_BACK:
             {
-                if(m_spellInfo->Id == 781)
-                    if(!m_caster->isInCombat()) 
-                        return SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW; 
+                // Disengage
+                if (m_spellInfo->SpellFamilyName == SPELLFAMILY_HUNTER && (m_spellInfo->SpellFamilyFlags & UI64LIT(0x400000000000)))
+                {
+                    if (!m_caster->isInCombat())
+                        return SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW;
+                }
                 break;
             }
             default:break;
