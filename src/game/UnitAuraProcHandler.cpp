@@ -2110,6 +2110,40 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     target = this;
                     break;
                 }
+                case 71406:                                         //Tiny Abomination in a Jar 25N Proc
+                {
+                    Aura *aura = GetAura(71432,EFFECT_INDEX_0);     //Mote of Anger
+                    if(aura && aura->GetStackAmount() >= 7)
+                    {
+                        RemoveAurasDueToSpell(71432);
+                        if (haveOffhandWeapon() && getAttackTimer(BASE_ATTACK) > getAttackTimer(OFF_ATTACK))
+                            CastSpell(getVictim(),71434,true);      //Off-hand "Manifest Anger" (50% instant weapon damage)
+                        else
+                            CastSpell(getVictim(),71433,true);      //Main-hand "Manifest Anger" (50% instant weapon damage)
+                        return SPELL_AURA_PROC_OK;
+                    }
+                    else
+                        triggered_spell_id = 71432;
+                    target = this;
+                    break;
+                }
+                case 71545:                                 //Tiny Abomination in a Jar 25H Proc
+                {
+                    Aura *aura = GetAura(71432,EFFECT_INDEX_0);
+                    if(aura && aura->GetStackAmount() >= 6)
+                    {
+                        RemoveAurasDueToSpell(71432);
+                        if (haveOffhandWeapon() && getAttackTimer(BASE_ATTACK) > getAttackTimer(OFF_ATTACK))
+                            CastSpell(getVictim(),71434,true);      //Off-hand "Manifest Anger" (50% instant weapon damage)
+                        else
+                            CastSpell(getVictim(),71433,true);      //Main-hand "Manifest Anger" (50% instant weapon damage)
+                        return SPELL_AURA_PROC_OK;
+                    }
+                    else
+                        triggered_spell_id = 71432;
+                    target = this;
+                    break;
+                }
             }
             break;
         }
