@@ -1006,7 +1006,45 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     target = this;
                     break;
                 }
-                case 71562:                                 //Deathbringer's Will 25H Proc
+                // Heartpierce - epic dagger
+                case 71880:
+                case 71892:
+                {
+                    if(GetTypeId() != TYPEID_PLAYER)
+                        return false;
+
+                    // Select powertype defined buff
+                    switch (getPowerType())
+                    {
+                        case POWER_MANA:
+                        {
+                            ((dummySpell->Id) == 71880) ? triggered_spell_id = 71881: triggered_spell_id = 71888;
+                            break;
+                        }
+                        case POWER_ENERGY:
+                        {
+                            ((dummySpell->Id) == 71880) ? triggered_spell_id = 71882: triggered_spell_id = 71887;
+                            break;
+                        }
+                        case POWER_RAGE:
+                        {
+                            ((dummySpell->Id) == 71880) ? triggered_spell_id = 71883: triggered_spell_id = 71886;
+                            break;
+                        }
+                        case POWER_RUNIC_POWER:
+                        {
+                            ((dummySpell->Id) == 71880) ? triggered_spell_id = 71884: triggered_spell_id = 71885;
+                            break;
+                        }
+                        default:
+                            return false;
+                    }
+
+                    target = this;
+                    break;
+                }
+				//Deathbringer's Will 25H Proc
+                case 71562:
                 {
                     if(GetTypeId() != TYPEID_PLAYER)
                         return SPELL_AURA_PROC_FAILED;
