@@ -953,6 +953,112 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 case 63320:
                     triggered_spell_id = 63321;
                     break;
+                case 71519:                                 //Deathbringer's Will 25N Proc
+                {
+                    if(GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+                    if(HasAura(71491) || HasAura(71484) || HasAura(71492) || HasAura(71491) || HasAura(71486))
+                        return SPELL_AURA_PROC_FAILED;
+                    switch(this->getClass())
+                    {
+                        case CLASS_WARRIOR:
+                        case CLASS_DEATH_KNIGHT:
+                        case CLASS_PALADIN:                                                                      
+                            switch(irand(1,3))
+                            {
+                                case 1: triggered_spell_id = 71491; break;   //Crit
+                                case 2: triggered_spell_id = 71484; break;  //Str
+                                case 3: triggered_spell_id = 71492; break;  //Haste
+                            }
+                            break;
+                        case CLASS_ROGUE:
+                        case CLASS_SHAMAN:
+                            switch(irand(1,3))
+                            {
+                                case 1: triggered_spell_id = 71485; break;  //Agi
+                                case 2: triggered_spell_id = 71486; break;  //AP
+                                case 3: triggered_spell_id = 71492; break;  //Haste
+                            }
+                            break;
+                        case CLASS_HUNTER:
+                            switch(irand(1,3))
+                            {
+                                case 1: triggered_spell_id = 71485; break;  //Agi
+                                case 2: triggered_spell_id = 71491; break;  //Crit
+                                case 3: triggered_spell_id = 71486; break;  //AP
+                            }
+                            break;
+                        case CLASS_DRUID:
+                            switch(irand(1,3))
+                            {
+                                case 1:triggered_spell_id = 71485; break;   //Agi
+                                case 2:triggered_spell_id = 71484; break;  //Strbreak;
+                                case 3:triggered_spell_id = 71492; break;  //Haste
+                            }
+                            break;
+                        case CLASS_PRIEST:
+                        case CLASS_MAGE:
+                        case CLASS_WARLOCK:
+                            break;                      //Unknown result for casters?
+                        default:
+                            break;
+                    }
+                    target = this;
+                    break;
+                }
+                case 71562:                                 //Deathbringer's Will 25H Proc
+                {
+                    if(GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+                    if(HasAura(71561) || HasAura(71556) || HasAura(71560) || HasAura(71558) || HasAura(71559))
+                        return SPELL_AURA_PROC_FAILED;
+                    switch(this->getClass())
+                    {
+                        case CLASS_WARRIOR:
+                        case CLASS_DEATH_KNIGHT:
+                        case CLASS_PALADIN:                                                                      
+                            switch(irand(1,3))
+                            {
+                                case 1: triggered_spell_id = 71559; break;  //Crit
+                                case 2: triggered_spell_id = 71561; break;  //Str
+                                case 3: triggered_spell_id = 71560; break;  //Haste
+                            }
+                            break;
+                        case CLASS_ROGUE:
+                        case CLASS_SHAMAN:
+                            switch(irand(1,3))
+                            {
+                                case 1: triggered_spell_id = 71556; break;  //Agi
+                                case 2: triggered_spell_id = 71558; break;  //AP
+                                case 3: triggered_spell_id = 71560; break;  //Haste
+                            }
+                            break;
+                        case CLASS_HUNTER:
+                            switch(irand(1,3))
+                            {
+                                case 1: triggered_spell_id = 71556; break;  //Agi
+                                case 2: triggered_spell_id = 71559; break;  //Crit
+                                case 3: triggered_spell_id = 71558; break;  //AP
+                            }
+                            break;
+                        case CLASS_DRUID:
+                            switch(irand(1,3))
+                            {
+                                case 1: triggered_spell_id = 71556; break;  //Agi
+                                case 2: triggered_spell_id = 71561; break;  //Str
+                                case 3: triggered_spell_id = 71560; break;  //Haste
+                            }
+                            break;
+                        case CLASS_PRIEST:
+                        case CLASS_MAGE:
+                        case CLASS_WARLOCK:
+                            break;                      //Unknown result for casters?
+                        default:
+                            break;
+                    }
+                    target = this;
+                    break;
+                }
                 // Item - Shadowmourne Legendary
                 case 71903:
                 {
