@@ -1011,7 +1011,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 case 71892:
                 {
                     if(GetTypeId() != TYPEID_PLAYER)
-                        return false;
+                        return SPELL_AURA_PROC_FAILED;
 
                     // Select powertype defined buff
                     switch (getPowerType())
@@ -1037,7 +1037,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                             break;
                         }
                         default:
-                            return false;
+                            return SPELL_AURA_PROC_FAILED;
                     }
 
                     target = this;
@@ -1765,7 +1765,8 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
 				// Tiger's Fury
 				if (procSpell->SpellFamilyFlags2 & 0x800 && effIndex == 1)
 				{
-					basepoints[0] = triggerAmount;
+					//basepoints[0] = triggerAmount;
+					basepoints[0] = (triggerAmount * GetMaxPower(POWER_RAGE) / 100);
 					triggered_spell_id = 51178;
 					target = this;
 					break;
@@ -1773,7 +1774,8 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
 				// Enrage
 				if (procSpell->Id == 5229 && effIndex == 0)
 				{
-					basepoints[0] = triggerAmount;
+					//basepoints[0] = triggerAmount;
+					basepoints[0] = (triggerAmount * GetMaxPower(POWER_RAGE) / 100);
 					triggered_spell_id = 51185;
 					target = this;
 					break;
