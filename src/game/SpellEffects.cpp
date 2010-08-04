@@ -1802,6 +1802,23 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     m_caster->CastSpell(unitTarget,60934,true,NULL);
                     return;
                 }
+                case 62973:                                 // Foam Sword Attack
+                {
+					if(!unitTarget)
+                        return;
+						
+                    if (m_caster->GetTypeId()!=TYPEID_PLAYER)
+                        return;
+
+                    uint8 hit = 0;
+                    hit = hit+1;
+                    if (hit == 3)
+                    {
+                        hit = 0;
+                        m_caster->CastSpell(unitTarget, 62994, true);
+                    }
+                    return;
+                }
                 case 67019:                                 // Flask of the North
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
