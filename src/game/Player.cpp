@@ -6962,6 +6962,9 @@ void Player::DuelComplete(DuelCompleteType type)
                 //Emote for winner. Just fo fun =)
                 duel->opponent->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
             }
+
+        target->RemoveAllSpellCooldown();
+        PSendSysMessage(LANG_REMOVEALL_COOLDOWN, tNameLink.c_str());
     }
 
     //Remove Duel Flag object
