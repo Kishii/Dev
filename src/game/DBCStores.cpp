@@ -21,6 +21,7 @@
 #include "Log.h"
 #include "ProgressBar.h"
 #include "SharedDefines.h"
+#include "SpellMgr.h"
 #include "ObjectGuid.h"
 
 #include "DBCfmt.h"
@@ -485,6 +486,27 @@ void LoadDBCStores(const std::string& dataPath)
         #endif
     }
 
+    // Rune Strike
+    SpellEntry *sfix5 = const_cast<SpellEntry*>(sSpellStore.LookupEntry(56817));
+    sfix5->Id = 56817;
+    sfix5->Attributes = 384;
+    sfix5->CastingTimeIndex = 1;
+    sfix5->procFlags = 16;
+    sfix5->procChance = 100;
+    sfix5->procCharges = 1;
+    sfix5->baseLevel = 67;
+    sfix5->spellLevel = 67;
+    sfix5->DurationIndex = 1;
+    sfix5->powerType = 6;
+    sfix5->rangeIndex = 2;
+    sfix5->EquippedItemClass = -1;
+    sfix5->Effect[EFFECT_INDEX_0] = 6;
+    sfix5->EffectImplicitTargetA[EFFECT_INDEX_0] = 1;
+    sfix5->EffectApplyAuraName[EFFECT_INDEX_0] = 4;
+    sfix5->SpellName[0] = "Rune Strike";
+    sfix5->SpellFamilyName = SPELLFAMILY_DEATHKNIGHT;
+    sfix5->SchoolMask = 1;
+	
     for (uint32 j = 0; j < sSkillLineAbilityStore.GetNumRows(); ++j)
     {
         SkillLineAbilityEntry const *skillLine = sSkillLineAbilityStore.LookupEntry(j);
