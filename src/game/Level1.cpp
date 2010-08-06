@@ -38,7 +38,7 @@
 #endif
 
 //-----------------------Npc Commands-----------------------
-bool ChatHandler::HandleNpcSayCommand(const char* args)
+bool ChatHandler::HandleNpcSayCommand(char* args)
 {
     if(!*args)
         return false;
@@ -56,7 +56,7 @@ bool ChatHandler::HandleNpcSayCommand(const char* args)
     return true;
 }
 
-bool ChatHandler::HandleNpcYellCommand(const char* args)
+bool ChatHandler::HandleNpcYellCommand(char* args)
 {
     if(!*args)
         return false;
@@ -75,7 +75,7 @@ bool ChatHandler::HandleNpcYellCommand(const char* args)
 }
 
 //show text emote by creature in chat
-bool ChatHandler::HandleNpcTextEmoteCommand(const char* args)
+bool ChatHandler::HandleNpcTextEmoteCommand(char* args)
 {
     if(!*args)
         return false;
@@ -95,12 +95,12 @@ bool ChatHandler::HandleNpcTextEmoteCommand(const char* args)
 }
 
 // make npc whisper to player
-bool ChatHandler::HandleNpcWhisperCommand(const char* args)
+bool ChatHandler::HandleNpcWhisperCommand(char* args)
 {
     if(!*args)
         return false;
 
-    char* receiver_str = strtok((char*)args, " ");
+    char* receiver_str = strtok(args, " ");
     char* text = strtok(NULL, "");
 
     uint64 guid = m_session->GetPlayer()->GetSelection();
@@ -124,7 +124,7 @@ bool ChatHandler::HandleNpcWhisperCommand(const char* args)
 //----------------------------------------------------------
 
 // global announce
-bool ChatHandler::HandleAnnounceCommand(const char* args)
+bool ChatHandler::HandleAnnounceCommand(char* args)
 {
     if(!*args)
         return false;
@@ -177,7 +177,7 @@ bool ChatHandler::HandleNameAnnounceCommand(const char* args)
 }
 
 //notification player at the screen
-bool ChatHandler::HandleNotifyCommand(const char* args)
+bool ChatHandler::HandleNotifyCommand(char* args)
 {
     if(!*args)
         return false;
@@ -193,7 +193,7 @@ bool ChatHandler::HandleNotifyCommand(const char* args)
 }
 
 //Enable\Dissable GM Mode
-bool ChatHandler::HandleGMCommand(const char* args)
+bool ChatHandler::HandleGMCommand(char* args)
 {
     if(!*args)
     {
@@ -204,7 +204,7 @@ bool ChatHandler::HandleGMCommand(const char* args)
         return true;
     }
 
-    std::string argstr = (char*)args;
+    std::string argstr = args;
 
     if (argstr == "on")
     {
@@ -234,7 +234,7 @@ bool ChatHandler::HandleGMCommand(const char* args)
 }
 
 // Enables or disables hiding of the staff badge
-bool ChatHandler::HandleGMChatCommand(const char* args)
+bool ChatHandler::HandleGMChatCommand(char* args)
 {
     if(!*args)
     {
@@ -245,7 +245,7 @@ bool ChatHandler::HandleGMChatCommand(const char* args)
         return true;
     }
 
-    std::string argstr = (char*)args;
+    std::string argstr = args;
 
     if (argstr == "on")
     {
@@ -267,7 +267,7 @@ bool ChatHandler::HandleGMChatCommand(const char* args)
 }
 
 //Enable\Dissable Invisible mode
-bool ChatHandler::HandleGMVisibleCommand(const char* args)
+bool ChatHandler::HandleGMVisibleCommand(char* args)
 {
     if (!*args)
     {
@@ -275,7 +275,7 @@ bool ChatHandler::HandleGMVisibleCommand(const char* args)
         return true;
     }
 
-    std::string argstr = (char*)args;
+    std::string argstr = args;
 
     if (argstr == "on")
     {
@@ -296,12 +296,12 @@ bool ChatHandler::HandleGMVisibleCommand(const char* args)
     return false;
 }
 
-bool ChatHandler::HandleGPSCommand(const char* args)
+bool ChatHandler::HandleGPSCommand(char* args)
 {
     WorldObject *obj = NULL;
     if (*args)
     {
-        uint64 guid = extractGuidFromLink((char*)args);
+        uint64 guid = extractGuidFromLink(args);
         if(guid)
             obj = (WorldObject*)m_session->GetPlayer()->GetObjectByTypeMask(guid, TYPEMASK_CREATURE_OR_GAMEOBJECT);
 
@@ -396,12 +396,12 @@ bool ChatHandler::HandleGPSCommand(const char* args)
 }
 
 //Summon Player
-bool ChatHandler::HandleNamegoCommand(const char* args)
+bool ChatHandler::HandleNamegoCommand(char* args)
 {
     Player* target;
     uint64 target_guid;
     std::string target_name;
-    if (!extractPlayerTarget((char*)args,&target,&target_guid,&target_name))
+    if (!extractPlayerTarget(args,&target,&target_guid,&target_name))
         return false;
 
     Player* _player = m_session->GetPlayer();
@@ -517,12 +517,12 @@ bool ChatHandler::HandleNamegoCommand(const char* args)
 }
 
 //Teleport to Player
-bool ChatHandler::HandleGonameCommand(const char* args)
+bool ChatHandler::HandleGonameCommand(char* args)
 {
     Player* target;
     uint64 target_guid;
     std::string target_name;
-    if (!extractPlayerTarget((char*)args,&target,&target_guid,&target_name))
+    if (!extractPlayerTarget(args,&target,&target_guid,&target_name))
         return false;
 
     Player* _player = m_session->GetPlayer();
@@ -656,10 +656,10 @@ bool ChatHandler::HandleGonameCommand(const char* args)
 }
 
 // Teleport player to last position
-bool ChatHandler::HandleRecallCommand(const char* args)
+bool ChatHandler::HandleRecallCommand(char* args)
 {
     Player* target;
-    if(!extractPlayerTarget((char*)args,&target))
+    if(!extractPlayerTarget(args,&target))
         return false;
 
     // check online security
@@ -677,24 +677,13 @@ bool ChatHandler::HandleRecallCommand(const char* args)
 }
 
 //Edit Player HP
-bool ChatHandler::HandleModifyHPCommand(const char* args)
+bool ChatHandler::HandleModifyHPCommand(char* args)
 {
     if(!*args)
         return false;
 
-    //    char* pHp = strtok((char*)args, " ");
-    //    if (!pHp)
-    //        return false;
-
-    //    char* pHpMax = strtok(NULL, " ");
-    //    if (!pHpMax)
-    //        return false;
-
-    //    int32 hpm = atoi(pHpMax);
-    //    int32 hp = atoi(pHp);
-
-    int32 hp = atoi((char*)args);
-    int32 hpm = atoi((char*)args);
+    int32 hp = atoi(args);
+    int32 hpm = atoi(args);
 
     if (hp <= 0 || hpm <= 0 || hpm < hp)
     {
@@ -726,23 +715,13 @@ bool ChatHandler::HandleModifyHPCommand(const char* args)
 }
 
 //Edit Player Mana
-bool ChatHandler::HandleModifyManaCommand(const char* args)
+bool ChatHandler::HandleModifyManaCommand(char* args)
 {
     if(!*args)
         return false;
 
-    // char* pmana = strtok((char*)args, " ");
-    // if (!pmana)
-    //     return false;
-
-    // char* pmanaMax = strtok(NULL, " ");
-    // if (!pmanaMax)
-    //     return false;
-
-    // int32 manam = atoi(pmanaMax);
-    // int32 mana = atoi(pmana);
-    int32 mana = atoi((char*)args);
-    int32 manam = atoi((char*)args);
+    int32 mana = atoi(args);
+    int32 manam = atoi(args);
 
     if (mana <= 0 || manam <= 0 || manam < mana)
     {
@@ -774,24 +753,13 @@ bool ChatHandler::HandleModifyManaCommand(const char* args)
 }
 
 //Edit Player Energy
-bool ChatHandler::HandleModifyEnergyCommand(const char* args)
+bool ChatHandler::HandleModifyEnergyCommand(char* args)
 {
     if(!*args)
         return false;
 
-    // char* pmana = strtok((char*)args, " ");
-    // if (!pmana)
-    //     return false;
-
-    // char* pmanaMax = strtok(NULL, " ");
-    // if (!pmanaMax)
-    //     return false;
-
-    // int32 manam = atoi(pmanaMax);
-    // int32 mana = atoi(pmana);
-
-    int32 energy = atoi((char*)args)*10;
-    int32 energym = atoi((char*)args)*10;
+    int32 energy = atoi(args)*10;
+    int32 energym = atoi(args)*10;
 
     if (energy <= 0 || energym <= 0 || energym < energy)
     {
@@ -825,24 +793,13 @@ bool ChatHandler::HandleModifyEnergyCommand(const char* args)
 }
 
 //Edit Player Rage
-bool ChatHandler::HandleModifyRageCommand(const char* args)
+bool ChatHandler::HandleModifyRageCommand(char* args)
 {
     if(!*args)
         return false;
 
-    // char* pmana = strtok((char*)args, " ");
-    // if (!pmana)
-    //     return false;
-
-    // char* pmanaMax = strtok(NULL, " ");
-    // if (!pmanaMax)
-    //     return false;
-
-    // int32 manam = atoi(pmanaMax);
-    // int32 mana = atoi(pmana);
-
-    int32 rage = atoi((char*)args)*10;
-    int32 ragem = atoi((char*)args)*10;
+    int32 rage = atoi(args)*10;
+    int32 ragem = atoi(args)*10;
 
     if (rage <= 0 || ragem <= 0 || ragem < rage)
     {
@@ -874,13 +831,13 @@ bool ChatHandler::HandleModifyRageCommand(const char* args)
 }
 
 // Edit Player Runic Power
-bool ChatHandler::HandleModifyRunicPowerCommand(const char* args)
+bool ChatHandler::HandleModifyRunicPowerCommand(char* args)
 {
     if(!*args)
         return false;
 
-    int32 rune = atoi((char*)args)*10;
-    int32 runem = atoi((char*)args)*10;
+    int32 rune = atoi(args)*10;
+    int32 runem = atoi(args)*10;
 
     if (rune <= 0 || runem <= 0 || runem < rune)
     {
@@ -908,12 +865,12 @@ bool ChatHandler::HandleModifyRunicPowerCommand(const char* args)
 }
 
 //Edit Player Faction
-bool ChatHandler::HandleModifyFactionCommand(const char* args)
+bool ChatHandler::HandleModifyFactionCommand(char* args)
 {
     if(!*args)
         return false;
 
-    char* pfactionid = extractKeyFromLink((char*)args,"Hfaction");
+    char* pfactionid = extractKeyFromLink(args,"Hfaction");
 
     Creature* chr = getSelectedCreature();
     if(!chr)
@@ -986,10 +943,10 @@ bool ChatHandler::HandleModifyFactionCommand(const char* args)
 }
 
 //Edit Player Spell
-bool ChatHandler::HandleModifySpellCommand(const char* args)
+bool ChatHandler::HandleModifySpellCommand(char* args)
 {
     if(!*args) return false;
-    char* pspellflatid = strtok((char*)args, " ");
+    char* pspellflatid = strtok(args, " ");
     if (!pspellflatid)
         return false;
 
@@ -1040,12 +997,12 @@ bool ChatHandler::HandleModifySpellCommand(const char* args)
 }
 
 //Edit Player TP
-bool ChatHandler::HandleModifyTalentCommand (const char* args)
+bool ChatHandler::HandleModifyTalentCommand (char* args)
 {
     if (!*args)
         return false;
 
-    int tp = atoi((char*)args);
+    int tp = atoi(args);
     if (tp < 0)
         return false;
 
@@ -1088,7 +1045,7 @@ bool ChatHandler::HandleModifyTalentCommand (const char* args)
 }
 
 //Enable On\OFF all taxi paths
-bool ChatHandler::HandleTaxiCheatCommand(const char* args)
+bool ChatHandler::HandleTaxiCheatCommand(char* args)
 {
     if (!*args)
     {
@@ -1097,7 +1054,7 @@ bool ChatHandler::HandleTaxiCheatCommand(const char* args)
         return false;
     }
 
-    std::string argstr = (char*)args;
+    std::string argstr = args;
 
     Player *chr = m_session->GetPlayer();
     if (!chr)
@@ -1134,12 +1091,12 @@ bool ChatHandler::HandleTaxiCheatCommand(const char* args)
 }
 
 //Edit Player Aspeed
-bool ChatHandler::HandleModifyASpeedCommand(const char* args)
+bool ChatHandler::HandleModifyASpeedCommand(char* args)
 {
     if (!*args)
         return false;
 
-    float modSpeed = (float)atof((char*)args);
+    float modSpeed = (float)atof(args);
 
     if (modSpeed > 10 || modSpeed < 0.1)
     {
@@ -1182,12 +1139,12 @@ bool ChatHandler::HandleModifyASpeedCommand(const char* args)
 }
 
 //Edit Player Speed
-bool ChatHandler::HandleModifySpeedCommand(const char* args)
+bool ChatHandler::HandleModifySpeedCommand(char* args)
 {
     if (!*args)
         return false;
 
-    float modSpeed = (float)atof((char*)args);
+    float modSpeed = (float)atof(args);
 
     if (modSpeed > 10 || modSpeed < 0.1)
     {
@@ -1227,12 +1184,12 @@ bool ChatHandler::HandleModifySpeedCommand(const char* args)
 }
 
 //Edit Player Swim Speed
-bool ChatHandler::HandleModifySwimCommand(const char* args)
+bool ChatHandler::HandleModifySwimCommand(char* args)
 {
     if (!*args)
         return false;
 
-    float modSpeed = (float)atof((char*)args);
+    float modSpeed = (float)atof(args);
 
     if (modSpeed > 10.0f || modSpeed < 0.01f)
     {
@@ -1272,12 +1229,12 @@ bool ChatHandler::HandleModifySwimCommand(const char* args)
 }
 
 //Edit Player Walk Speed
-bool ChatHandler::HandleModifyBWalkCommand(const char* args)
+bool ChatHandler::HandleModifyBWalkCommand(char* args)
 {
     if (!*args)
         return false;
 
-    float modSpeed = (float)atof((char*)args);
+    float modSpeed = (float)atof(args);
 
     if (modSpeed > 10.0f || modSpeed < 0.1f)
     {
@@ -1317,12 +1274,12 @@ bool ChatHandler::HandleModifyBWalkCommand(const char* args)
 }
 
 //Edit Player Fly
-bool ChatHandler::HandleModifyFlyCommand(const char* args)
+bool ChatHandler::HandleModifyFlyCommand(char* args)
 {
     if (!*args)
         return false;
 
-    float modSpeed = (float)atof((char*)args);
+    float modSpeed = (float)atof(args);
 
     if (modSpeed > 10.0f || modSpeed < 0.1f)
     {
@@ -1353,12 +1310,12 @@ bool ChatHandler::HandleModifyFlyCommand(const char* args)
 }
 
 //Edit Player Scale
-bool ChatHandler::HandleModifyScaleCommand(const char* args)
+bool ChatHandler::HandleModifyScaleCommand(char* args)
 {
     if (!*args)
         return false;
 
-    float Scale = (float)atof((char*)args);
+    float Scale = (float)atof(args);
     if (Scale > 10.0f || Scale <= 0.0f)
     {
         SendSysMessage(LANG_BAD_VALUE);
@@ -1391,16 +1348,14 @@ bool ChatHandler::HandleModifyScaleCommand(const char* args)
 }
 
 //Enable Player mount
-bool ChatHandler::HandleModifyMountCommand(const char* args)
+bool ChatHandler::HandleModifyMountCommand(char* args)
 {
     if(!*args)
         return false;
 
     uint16 mId = 1147;
     float speed = (float)15;
-    uint32 num = 0;
-
-    num = atoi((char*)args);
+    uint32 num = atoi(args);
     switch(num)
     {
         case 1:
@@ -1616,8 +1571,8 @@ bool ChatHandler::HandleModifyMountCommand(const char* args)
             return false;
     }
 
-    Player *chr = m_session->GetPlayer();
-    if (chr == NULL)
+    Player *chr = getSelectedPlayer();
+    if (!chr)
     {
         SendSysMessage(LANG_NO_CHAR_SELECTED);
         SetSentErrorMessage(true);
@@ -1652,7 +1607,7 @@ bool ChatHandler::HandleModifyMountCommand(const char* args)
 }
 
 //Edit Player money
-bool ChatHandler::HandleModifyMoneyCommand(const char* args)
+bool ChatHandler::HandleModifyMoneyCommand(char* args)
 {
     if (!*args)
         return false;
@@ -1669,7 +1624,7 @@ bool ChatHandler::HandleModifyMoneyCommand(const char* args)
     if (HasLowerSecurity(chr, 0))
         return false;
 
-    int32 addmoney = atoi((char*)args);
+    int32 addmoney = atoi(args);
 
     uint32 moneyuser = chr->GetMoney();
 
@@ -1715,7 +1670,7 @@ bool ChatHandler::HandleModifyMoneyCommand(const char* args)
 }
 
 //Edit Unit field
-bool ChatHandler::HandleModifyBitCommand(const char* args)
+bool ChatHandler::HandleModifyBitCommand(char* args)
 {
     if( !*args )
         return false;
@@ -1732,7 +1687,7 @@ bool ChatHandler::HandleModifyBitCommand(const char* args)
     if (unit->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity((Player *)unit, 0))
         return false;
 
-    char* pField = strtok((char*)args, " ");
+    char* pField = strtok(args, " ");
     if (!pField)
         return false;
 
@@ -1769,7 +1724,7 @@ bool ChatHandler::HandleModifyBitCommand(const char* args)
     return true;
 }
 
-bool ChatHandler::HandleModifyHonorCommand (const char* args)
+bool ChatHandler::HandleModifyHonorCommand (char* args)
 {
     if (!*args)
         return false;
@@ -1786,7 +1741,7 @@ bool ChatHandler::HandleModifyHonorCommand (const char* args)
     if (HasLowerSecurity(target, 0))
         return false;
 
-    int32 amount = (uint32)atoi(args);
+    int32 amount = (int32)atoi(args);
 
     target->ModifyHonorPoints(amount);
 
@@ -1795,7 +1750,7 @@ bool ChatHandler::HandleModifyHonorCommand (const char* args)
     return true;
 }
 
-bool ChatHandler::HandleTeleCommand(const char * args)
+bool ChatHandler::HandleTeleCommand(char* args)
 {
     if(!*args)
         return false;
@@ -1803,7 +1758,7 @@ bool ChatHandler::HandleTeleCommand(const char * args)
     Player* _player = m_session->GetPlayer();
 
     // id, or string, or [name] Shift-click form |color|Htele:id|h[name]|h|r
-    GameTele const* tele = extractGameTeleFromLink((char*)args);
+    GameTele const* tele = extractGameTeleFromLink(args);
 
     if (!tele)
     {
@@ -1815,7 +1770,7 @@ bool ChatHandler::HandleTeleCommand(const char * args)
     return HandleGoHelper(_player, tele->mapId, tele->position_x, tele->position_y, &tele->position_z, &tele->orientation);
 }
 
-bool ChatHandler::HandleLookupAreaCommand(const char* args)
+bool ChatHandler::HandleLookupAreaCommand(char* args)
 {
     if (!*args)
         return false;
@@ -1882,7 +1837,7 @@ bool ChatHandler::HandleLookupAreaCommand(const char* args)
 }
 
 //Find tele in game_tele order by name
-bool ChatHandler::HandleLookupTeleCommand(const char * args)
+bool ChatHandler::HandleLookupTeleCommand(char * args)
 {
     if(!*args)
     {
@@ -1891,7 +1846,7 @@ bool ChatHandler::HandleLookupTeleCommand(const char * args)
         return false;
     }
 
-    char const* str = strtok((char*)args, " ");
+    char const* str = strtok(args, " ");
     if(!str)
         return false;
 
@@ -1929,7 +1884,7 @@ bool ChatHandler::HandleLookupTeleCommand(const char * args)
 }
 
 //Enable\Dissable accept whispers (for GM)
-bool ChatHandler::HandleWhispersCommand(const char* args)
+bool ChatHandler::HandleWhispersCommand(char* args)
 {
     if(!*args)
     {
@@ -1937,7 +1892,7 @@ bool ChatHandler::HandleWhispersCommand(const char* args)
         return true;
     }
 
-    std::string argstr = (char*)args;
+    std::string argstr = args;
     // whisper on
     if (argstr == "on")
     {
@@ -1960,7 +1915,7 @@ bool ChatHandler::HandleWhispersCommand(const char* args)
 }
 
 //Save all players in the world
-bool ChatHandler::HandleSaveAllCommand(const char* /*args*/)
+bool ChatHandler::HandleSaveAllCommand(char* /*args*/)
 {
     sObjectAccessor.SaveAllPlayers();
     SendSysMessage(LANG_PLAYERS_SAVED);
@@ -1968,28 +1923,24 @@ bool ChatHandler::HandleSaveAllCommand(const char* /*args*/)
 }
 
 //Send mail by command
-bool ChatHandler::HandleSendMailCommand(const char* args)
+bool ChatHandler::HandleSendMailCommand(char* args)
 {
     // format: name "subject text" "mail text"
     Player* target;
     uint64 target_guid;
     std::string target_name;
-    if(!extractPlayerTarget((char*)args,&target,&target_guid,&target_name))
+    if (!extractPlayerTarget(args, &target, &target_guid, &target_name))
         return false;
 
-    char* tail1 = strtok(NULL, "");
-    if(!tail1)
+    char* tail = strtok(NULL, "");
+    if(!tail)
         return false;
 
-    char* msgSubject = extractQuotedArg(tail1);
+    char* msgSubject = ExtractQuotedArg(&tail);
     if (!msgSubject)
         return false;
 
-    char* tail2 = strtok(NULL, "");
-    if(!tail2)
-        return false;
-
-    char* msgText = extractQuotedArg(tail2);
+    char* msgText = ExtractQuotedArg(&tail);
     if (!msgText)
         return false;
 
@@ -2009,23 +1960,19 @@ bool ChatHandler::HandleSendMailCommand(const char* args)
 }
 
 // teleport player to given game_tele.entry
-bool ChatHandler::HandleTeleNameCommand(const char * args)
+bool ChatHandler::HandleTeleNameCommand(char* args)
 {
-    char* nameStr;
-    char* teleStr;
-    extractOptFirstArg((char*)args,&nameStr,&teleStr);
-    if(!teleStr)
-        return false;
+    char* nameStr = ExtractOptArg(&args);
 
     Player* target;
     uint64 target_guid;
     std::string target_name;
-    if(!extractPlayerTarget(nameStr,&target,&target_guid,&target_name))
+    if (!extractPlayerTarget(nameStr,&target,&target_guid,&target_name))
         return false;
 
     // id, or string, or [name] Shift-click form |color|Htele:id|h[name]|h|r
-    GameTele const* tele = extractGameTeleFromLink(teleStr);
-    if(!tele)
+    GameTele const* tele = extractGameTeleFromLink(args);
+    if (!tele)
     {
         SendSysMessage(LANG_COMMAND_TELE_NOTFOUND);
         SetSentErrorMessage(true);
@@ -2070,9 +2017,9 @@ bool ChatHandler::HandleTeleNameCommand(const char * args)
 }
 
 //Teleport group to given game_tele.entry
-bool ChatHandler::HandleTeleGroupCommand(const char * args)
+bool ChatHandler::HandleTeleGroupCommand(char * args)
 {
-    if(!*args)
+    if (!*args)
         return false;
 
     Player *player = getSelectedPlayer();
@@ -2088,7 +2035,7 @@ bool ChatHandler::HandleTeleGroupCommand(const char * args)
         return false;
 
     // id, or string, or [name] Shift-click form |color|Htele:id|h[name]|h|r
-    GameTele const* tele = extractGameTeleFromLink((char*)args);
+    GameTele const* tele = extractGameTeleFromLink(args);
     if(!tele)
     {
         SendSysMessage(LANG_COMMAND_TELE_NOTFOUND);
@@ -2146,10 +2093,10 @@ bool ChatHandler::HandleTeleGroupCommand(const char * args)
 }
 
 //Summon group of player
-bool ChatHandler::HandleGroupgoCommand(const char* args)
+bool ChatHandler::HandleGroupgoCommand(char* args)
 {
     Player* target;
-    if(!extractPlayerTarget((char*)args,&target))
+    if (!extractPlayerTarget(args, &target))
         return false;
 
     // check online security
@@ -2286,14 +2233,14 @@ bool ChatHandler::HandleGoHelper( Player* player, uint32 mapid, float x, float y
     return true;
 }
 
-bool ChatHandler::HandleGoTaxinodeCommand(const char* args)
+bool ChatHandler::HandleGoTaxinodeCommand(char* args)
 {
     Player* _player = m_session->GetPlayer();
 
     if (!*args)
         return false;
 
-    char* cNodeId = extractKeyFromLink((char*)args,"Htaxinode");
+    char* cNodeId = extractKeyFromLink(args, "Htaxinode");
     if (!cNodeId)
         return false;
 
@@ -2319,7 +2266,7 @@ bool ChatHandler::HandleGoTaxinodeCommand(const char* args)
     return HandleGoHelper(_player, node->map_id, node->x, node->y, &node->z);
 }
 
-bool ChatHandler::HandleGoCommand(const char* args)
+bool ChatHandler::HandleGoCommand(char* args)
 {
     if(!*args)
         return false;
@@ -2332,7 +2279,7 @@ bool ChatHandler::HandleGoCommand(const char* args)
     // raw coordinates case
     if (isNumeric(args[0]) || args[0] == '-')
     {
-        char* px = strtok((char*)args, " ");
+        char* px = strtok(args, " ");
         char* py = strtok(NULL, " ");
         char* pz = strtok(NULL, " ");
         char* pmapid = strtok(NULL, " ");
@@ -2350,7 +2297,7 @@ bool ChatHandler::HandleGoCommand(const char* args)
 
     }
     // link case
-    else if (!extractLocationFromLink((char*)args, mapid, x, y, z))
+    else if (!extractLocationFromLink(args, mapid, x, y, z))
         return false;
 
     return HandleGoHelper(_player, mapid, x, y, &z);
@@ -2359,14 +2306,14 @@ bool ChatHandler::HandleGoCommand(const char* args)
 
 
 //teleport at coordinates
-bool ChatHandler::HandleGoXYCommand(const char* args)
+bool ChatHandler::HandleGoXYCommand(char* args)
 {
-    if(!*args)
+    if (!*args)
         return false;
 
     Player* _player = m_session->GetPlayer();
 
-    char* px = strtok((char*)args, " ");
+    char* px = strtok(args, " ");
     char* py = strtok(NULL, " ");
     char* pmapid = strtok(NULL, " ");
 
@@ -2384,14 +2331,14 @@ bool ChatHandler::HandleGoXYCommand(const char* args)
 }
 
 //teleport at coordinates, including Z
-bool ChatHandler::HandleGoXYZCommand(const char* args)
+bool ChatHandler::HandleGoXYZCommand(char* args)
 {
-    if(!*args)
+    if (!*args)
         return false;
 
     Player* _player = m_session->GetPlayer();
 
-    char* px = strtok((char*)args, " ");
+    char* px = strtok(args, " ");
     char* py = strtok(NULL, " ");
     char* pz = strtok(NULL, " ");
     char* pmapid = strtok(NULL, " ");
@@ -2412,18 +2359,18 @@ bool ChatHandler::HandleGoXYZCommand(const char* args)
 }
 
 //teleport at coordinates
-bool ChatHandler::HandleGoZoneXYCommand(const char* args)
+bool ChatHandler::HandleGoZoneXYCommand(char* args)
 {
-    if(!*args)
+    if (!*args)
         return false;
 
     Player* _player = m_session->GetPlayer();
 
-    char* px = strtok((char*)args, " ");
+    char* px = strtok(args, " ");
     char* py = strtok(NULL, " ");
     char* tail = strtok(NULL,"");
 
-    char* cAreaId = extractKeyFromLink(tail,"Harea");       // string or [name] Shift-click form |color|Harea:area_id|h[name]|h|r
+    char* cAreaId = extractKeyFromLink(tail, "Harea");      // string or [name] Shift-click form |color|Harea:area_id|h[name]|h|r
 
     if (!px || !py)
         return false;
@@ -2471,14 +2418,14 @@ bool ChatHandler::HandleGoZoneXYCommand(const char* args)
 }
 
 //teleport to grid
-bool ChatHandler::HandleGoGridCommand(const char* args)
+bool ChatHandler::HandleGoGridCommand(char* args)
 {
     if (!*args)
         return false;
 
     Player* _player = m_session->GetPlayer();
 
-    char* px = strtok((char*)args, " ");
+    char* px = strtok(args, " ");
     char* py = strtok(NULL, " ");
     char* pmapid = strtok(NULL, " ");
 
@@ -2496,7 +2443,7 @@ bool ChatHandler::HandleGoGridCommand(const char* args)
     return HandleGoHelper(_player, mapid, x, y);
 }
 
-bool ChatHandler::HandleModifyDrunkCommand(const char* args)
+bool ChatHandler::HandleModifyDrunkCommand(char* args)
 {
     if(!*args)    return false;
 
