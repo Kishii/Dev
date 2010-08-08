@@ -1,14 +1,3 @@
 INSERT INTO `mangos_string` VALUES ('11001', 'La bataille du monastère va commancer dans 1 minute !', null, null, null, null, null, null, null, '????? ?? ?????? ????? ????? ???????? ????? 1 ??????.');
 INSERT INTO `mangos_string` VALUES ('11002', 'La bataille du monastère va commancer dans 30 secondes, préparer vous !', null, null, null, null, null, null, null, null);
 INSERT INTO `mangos_string` VALUES ('11003', 'La bataille du monastère commance !', null, null, null, null, null, null, null, null);
-INSERT INTO `mangos_string` VALUES ('11004', '$n à capturer le drapeau de la Horde !', null, null, null, null, null, null, null, null);
-INSERT INTO `mangos_string` VALUES ('11005', '$n à capturer le drapeau de l\'Alliance !', null, null, null, null, null, null, null, null);
-INSERT INTO `mangos_string` VALUES ('11006', 'Le drapeau de la Horde à été ramasser par $n!', null, null, null, null, null, null, null, null);
-INSERT INTO `mangos_string` VALUES ('11007', 'Le drapeau de l\'Alliance à été ramasser par $n!', null, null, null, null, null, null, null, null);
-INSERT INTO `mangos_string` VALUES ('11008', 'Le drapeau de l\'Alliance à été retourner a sa base par $n !', null, null, null, null, null, null, null, null);
-INSERT INTO `mangos_string` VALUES ('11009', 'Le drapeau de la Horde est retourner a sa base par $n !', null, null, null, null, null, null, null, null);
-INSERT INTO `mangos_string` VALUES ('11010', 'Le drapeau de la Horde à été volé par $n !', null, null, null, null, null, null, null, null);
-INSERT INTO `mangos_string` VALUES ('11011', 'Le drapeau de l\'Alliance à été volé par $n !', null, null, null, null, null, null, null, null);
-INSERT INTO `mangos_string` VALUES ('11012', 'Les drapeau on été placer à leur bases.', null, null, null, null, null, null, null, null);
-INSERT INTO `mangos_string` VALUES ('11013', 'Le drapeau de l\'Alliance à été placer a sa base.', null, null, null, null, null, null, null, null);
-INSERT INTO `mangos_string` VALUES ('11014', 'Le drapeau de la Horde à été placer a sa base.', null, null, null, null, null, null, null, null);

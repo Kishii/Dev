@@ -901,17 +901,6 @@ enum MangosStrings
     LANG_BG_MO_START_ONE_MINUTE         = 11001,
     LANG_BG_MO_START_HALF_MINUTE        = 11002,
     LANG_BG_MO_HAS_BEGUN                = 11003,
-    LANG_BG_MO_CAPTURED_HF              = 11004,
-    LANG_BG_MO_CAPTURED_AF              = 11005,
-    LANG_BG_MO_DROPPED_HF               = 11006,
-    LANG_BG_MO_DROPPED_AF               = 11007,
-    LANG_BG_MO_RETURNED_AF              = 11008,
-    LANG_BG_MO_RETURNED_HF              = 11009,
-    LANG_BG_MO_PICKEDUP_HF              = 11010,
-    LANG_BG_MO_PICKEDUP_AF              = 11011,
-    LANG_BG_MO_F_PLACED                 = 11012,
-    LANG_BG_MO_ALLIANCE_FLAG_RESPAWNED  = 11013,
-    LANG_BG_MO_HORDE_FLAG_RESPAWNED     = 11014,
 
     // NOT RESERVED IDS                   12000-1999999999
     // `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)

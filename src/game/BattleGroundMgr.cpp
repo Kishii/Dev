@@ -1926,6 +1926,8 @@ BattleGroundQueueTypeId BattleGroundMgr::BGQueueTypeId(BattleGroundTypeId bgType
             return BATTLEGROUND_QUEUE_IC;
         case BATTLEGROUND_RB:
             return BATTLEGROUND_QUEUE_RB;
+		case BATTLEGROUND_MO:
+			return BATTLEGROUND_QUEUE_MO;
         case BATTLEGROUND_AA:
         case BATTLEGROUND_NA:
         case BATTLEGROUND_RL:

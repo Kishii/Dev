@@ -8519,6 +8519,14 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
         FillInitialWorldState(data, count, 0x9bd, 0xF);
         FillInitialWorldState(data, count, 0x9bb, 0xF);
     }
+	if(mapid == 44)
+	{
+		if (bg && bg->GetTypeID(true) == BATTLEGROUND_MO)
+			bg->FillInitialWorldStates(data, count);
+		else
+			FillInitialWorldState(data,count, MO_world_states);
+		break;
+	}
     switch(zoneid)
     {
         case 1:
