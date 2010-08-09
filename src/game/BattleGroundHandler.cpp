@@ -291,6 +291,7 @@ void WorldSession::HandleBattleGroundPlayerPositionsOpcode( WorldPacket & /*recv
             break;
         case BATTLEGROUND_AB:
         case BATTLEGROUND_AV:
+		case BATTLEGROUND_MO:
             {
                 //for other BG types - send default
                 WorldPacket data(MSG_BATTLEGROUND_PLAYER_POSITIONS, (4+4));

@@ -870,6 +870,7 @@ uint32 BattleGround::GetBattlemasterEntry() const
         case BATTLEGROUND_AB: return 14879;
         case BATTLEGROUND_EY: return 22516;
         case BATTLEGROUND_NA: return 20200;
+		case BATTLEGROUND_MO: return 99001; // TEST
         default:              return 0;
     }
 }
@@ -897,6 +898,7 @@ void BattleGround::RewardMark(Player *plr,uint32 count)
                 RewardSpellCast(plr,SPELL_AB_MARK_LOSER);
             break;
         case BATTLEGROUND_EY:                               // no rewards
+		case BATTLEGROUND_MO:                               // no rewards
         default:
             break;
     }

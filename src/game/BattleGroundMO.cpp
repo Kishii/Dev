@@ -69,7 +69,7 @@ void BattleGroundMO::HandleAreaTrigger(Player * /*Source*/, uint32 /*Trigger*/)
 {
 }
 
-bool BattleGroundDS::SetupBattleGround()
+bool BattleGroundMO::SetupBattleGround()
 {
     return true;
 }
