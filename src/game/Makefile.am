@@ -51,6 +51,7 @@ libmangosgame_a_SOURCES = \
 	BattleGroundDS.cpp \
 	BattleGroundEY.cpp \
 	BattleGroundIC.cpp \
+	BattleGroundMO.cpp \
 	BattleGroundNA.cpp \
 	BattleGroundRL.cpp \
 	BattleGroundRV.cpp \
@@ -65,6 +66,7 @@ libmangosgame_a_SOURCES = \
 	BattleGroundDS.h \
 	BattleGroundEY.h \
 	BattleGroundIC.h \
+	BattleGroundMO.h \
 	BattleGroundNA.h \
 	BattleGroundRL.h \
 	BattleGroundRV.h \
