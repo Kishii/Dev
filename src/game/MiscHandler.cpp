@@ -1259,9 +1259,6 @@ void WorldSession::HandleComplainOpcode( WorldPacket & recv_data )
     SendPacket(&data);
 
     DEBUG_LOG("REPORT SPAM: type %u, guid %u, unk1 %u, unk2 %u, unk3 %u, unk4 %u, message %s", spam_type, GUID_LOPART(spammer_guid), unk1, unk2, unk3, unk4, description.c_str());
-	
-    if (Player* pSpammer = ObjectAccessor::FindPlayer(spammer_guid))
-        pSpammer->ReportSpam(GetAccountId());
 }
 
 void WorldSession::HandleRealmSplitOpcode( WorldPacket & recv_data )
