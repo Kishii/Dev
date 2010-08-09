@@ -15,32 +15,36 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
 #ifndef __BATTLEGROUNDMO_H
 #define __BATTLEGROUNDMO_H
 
-#include "BattleGround.h"
+class BattleGround;
 
-#define BG_MO_MAX_TEAM_SCORE      3
-#define BG_MO_FLAG_RESPAWN_TIME   (23*IN_MILLISECONDS)
-#define BG_MO_FLAG_DROP_TIME      (10*IN_MILLISECONDS)
-#define BG_MO_TIME_LIMIT          (25*MINUTE*IN_MILLISECONDS)
-
-enum BG_MO_Sound
+class BattleGroundMOScore : public BattleGroundScore
 {
-    BG_MO_SOUND_FLAG_CAPTURED_ALLIANCE  = 8173,
-    BG_MO_SOUND_FLAG_CAPTURED_HORDE     = 8213,
-    BG_MO_SOUND_FLAG_PLACED             = 8232,
-    BG_MO_SOUND_FLAG_RETURNED           = 8192,
-    BG_MO_SOUND_HORDE_FLAG_PICKED_UP    = 8212,
-    BG_MO_SOUND_ALLIANCE_FLAG_PICKED_UP = 8174,
-    BG_MO_SOUND_FLAGS_RESPAWNED         = 8232
+    public:
+        BattleGroundMOScore() {};
+        virtual ~BattleGroundMOScore() {};
+        //TODO fix me
 };
 
-enum BG_MO_FlagState
+class BattleGroundMO : public BattleGround
 {
-    BG_MO_FLAG_STATE_ON_BASE      = 0,
-    BG_MO_FLAG_STATE_WAIT_RESPAWN = 1,
-    BG_MO_FLAG_STATE_ON_PLAYER    = 2,
-    BG_MO_FLAG_STATE_ON_GROUND    = 3
+    friend class BattleGroundMgr;
+
+    public:
+        BattleGroundMO();
+        ~BattleGroundMO();
+        void Update(uint32 diff);
+
+        /* inherited from BattlegroundClass */
+        virtual void AddPlayer(Player *plr);
+        virtual void StartingEventCloseDoors();
+        virtual void StartingEventOpenDoors();
+
+        void RemovePlayer(Player *plr, uint64 guid);
+        void HandleAreaTrigger(Player *Source, uint32 Trigger);
+        bool SetupBattleGround();
+        void HandleKillPlayer(Player* player, Player *killer);
 };
+#endif

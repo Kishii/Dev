@@ -18,12 +18,8 @@
 
 #include "Player.h"
 #include "BattleGround.h"
-#include "BattleGroundAV.h"
-#include "BattleGroundMgr.h"
-#include "Creature.h"
-#include "GameObject.h"
+#include "BattleGroundMO.h"
 #include "Language.h"
-#include "WorldPacket.h"
 
 BattleGroundMO::BattleGroundMO()
 {
@@ -35,13 +31,45 @@ BattleGroundMO::BattleGroundMO()
 
 BattleGroundMO::~BattleGroundMO()
 {
+
 }
 
-void BattleGroundMO::HandleKillPlayer(Player *player, Player *killer)
+void BattleGroundMO::Update(uint32 diff)
 {
-    if (GetStatus() != STATUS_IN_PROGRESS)
-        return;
+    BattleGround::Update(diff);
+}
 
+void BattleGroundMO::StartingEventCloseDoors()
+{
+}
+
+void BattleGroundMO::StartingEventOpenDoors()
+{
+}
+
+void BattleGroundMO::AddPlayer(Player *plr)
+{
+    BattleGround::AddPlayer(plr);
+    //create score and add it to map, default values are set in constructor
+    BattleGroundMOScore* sc = new BattleGroundMOScore;
+
+    m_PlayerScores[plr->GetGUID()] = sc;
+}
+
+void BattleGroundMO::RemovePlayer(Player * /*plr*/, uint64 /*guid*/)
+{
+}
+
+void BattleGroundMO::HandleKillPlayer(Player* player, Player* killer)
+{
     BattleGround::HandleKillPlayer(player, killer);
-    UpdateScore(GetTeamIndexByTeamId(player->GetTeam()), -1);
+}
+
+void BattleGroundMO::HandleAreaTrigger(Player * /*Source*/, uint32 /*Trigger*/)
+{
+}
+
+bool BattleGroundDS::SetupBattleGround()
+{
+    return true;
 }
