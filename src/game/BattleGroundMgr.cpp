@@ -33,6 +33,7 @@
 #include "BattleGroundRV.h"
 #include "BattleGroundIC.h"
 #include "BattleGroundRB.h"
+#include "BattleGroundMO.h"
 #include "MapManager.h"
 #include "Map.h"
 #include "MapInstanced.h"
@@ -1365,6 +1366,7 @@ void BattleGroundMgr::BuildPvpLogDataPacket(WorldPacket *data, BattleGround *bg)
             case BATTLEGROUND_RV:                           // wotlk
             case BATTLEGROUND_IC:                           // wotlk
             case BATTLEGROUND_RB:                           // wotlk
+			case BATTLEGROUND_MO:                           // GMISLAND
                 *data << (int32)0;                          // 0
                 break;
             default:
@@ -1559,6 +1561,9 @@ BattleGround * BattleGroundMgr::CreateNewBattleGround(BattleGroundTypeId bgTypeI
         case BATTLEGROUND_RB:
             bg = new BattleGroundRB(*(BattleGroundRB*)bg_template);
             break;
+        case BATTLEGROUND_MO:
+            bg = new BattleGroundMO(*(BattleGroundMO*)bg_template);
+            break;
         default:
             //error, but it is handled few lines above
             return 0;
@@ -1608,6 +1613,7 @@ uint32 BattleGroundMgr::CreateBattleGround(BattleGroundTypeId bgTypeId, bool IsA
         case BATTLEGROUND_RV: bg = new BattleGroundRV; break;
         case BATTLEGROUND_IC: bg = new BattleGroundIC; break;
         case BATTLEGROUND_RB: bg = new BattleGroundRB; break;
+		case BATTLEGROUND_MO: bg = new BattleGroundMO; break;
         default:bg = new BattleGround;   break;             // placeholder for non implemented BG
     }
 
@@ -1701,6 +1707,13 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
             AStartLoc[2] = 0;
             AStartLoc[3] = fields[4].GetFloat();
         }
+        else if (bgTypeID == BATTLEGROUND_MO)
+        {
+            AStartLoc[0] = 0;
+            AStartLoc[1] = 0;
+            AStartLoc[2] = 0;
+            AStartLoc[3] = fields[4].GetFloat();
+        }
         else
         {
             sLog.outErrorDb("Table `battleground_template` for id %u have nonexistent WorldSafeLocs.dbc id %u in field `AllianceStartLoc`. BG not created.", bgTypeID, start1);
@@ -1718,6 +1731,13 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
             HStartLoc[3] = fields[6].GetFloat();
         }
         else if (bgTypeID == BATTLEGROUND_AA || bgTypeID == BATTLEGROUND_RB)
+        {
+            HStartLoc[0] = 0;
+            HStartLoc[1] = 0;
+            HStartLoc[2] = 0;
+            HStartLoc[3] = fields[6].GetFloat();
+        }
+        else if (bgTypeID == BATTLEGROUND_MO) 
         {
             HStartLoc[0] = 0;
             HStartLoc[1] = 0;
@@ -1968,6 +1988,8 @@ BattleGroundTypeId BattleGroundMgr::BGTemplateId(BattleGroundQueueTypeId bgQueue
             return BATTLEGROUND_IC;
         case BATTLEGROUND_QUEUE_RB:	
             return BATTLEGROUND_RB;
+        case BATTLEGROUND_QUEUE_MO:	
+            return BATTLEGROUND_MO;
         case BATTLEGROUND_QUEUE_2v2:
         case BATTLEGROUND_QUEUE_3v3:
         case BATTLEGROUND_QUEUE_5v5:
