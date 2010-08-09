@@ -204,33 +204,26 @@ bool ChatHandler::HandleGMCommand(char* args)
         return true;
     }
 
-    std::string argstr = args;
+    bool value;
+    if (!ExtractOnOff(&args, value))
+    {
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
+    }
 
-    if (argstr == "on")
+    if (value)
     {
         m_session->GetPlayer()->SetGameMaster(true);
         m_session->SendNotification(LANG_GM_ON);
-        #ifdef _DEBUG_VMAPS
-        VMAP::IVMapManager *vMapManager = VMAP::VMapFactory::createOrGetVMapManager();
-        vMapManager->processCommand("stoplog");
-        #endif
-        return true;
     }
-
-    if (argstr == "off")
+    else
     {
         m_session->GetPlayer()->SetGameMaster(false);
         m_session->SendNotification(LANG_GM_OFF);
-        #ifdef _DEBUG_VMAPS
-        VMAP::IVMapManager *vMapManager = VMAP::VMapFactory::createOrGetVMapManager();
-        vMapManager->processCommand("startlog");
-        #endif
-        return true;
     }
 
-    SendSysMessage(LANG_USE_BOL);
-    SetSentErrorMessage(true);
-    return false;
+    return true;
 }
 
 // Enables or disables hiding of the staff badge
@@ -245,25 +238,26 @@ bool ChatHandler::HandleGMChatCommand(char* args)
         return true;
     }
 
-    std::string argstr = args;
+    bool value;
+    if (!ExtractOnOff(&args, value))
+    {
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
+    }
 
-    if (argstr == "on")
+    if (value)
     {
         m_session->GetPlayer()->SetGMChat(true);
         m_session->SendNotification(LANG_GM_CHAT_ON);
-        return true;
     }
-
-    if (argstr == "off")
+    else
     {
         m_session->GetPlayer()->SetGMChat(false);
         m_session->SendNotification(LANG_GM_CHAT_OFF);
-        return true;
     }
 
-    SendSysMessage(LANG_USE_BOL);
-    SetSentErrorMessage(true);
-    return false;
+    return true;
 }
 
 //Enable\Dissable Invisible mode
@@ -275,25 +269,26 @@ bool ChatHandler::HandleGMVisibleCommand(char* args)
         return true;
     }
 
-    std::string argstr = args;
+    bool value;
+    if (!ExtractOnOff(&args, value))
+    {
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
+    }
 
-    if (argstr == "on")
+    if (value)
     {
         m_session->GetPlayer()->SetGMVisible(true);
         m_session->SendNotification(LANG_INVISIBLE_VISIBLE);
-        return true;
     }
-
-    if (argstr == "off")
+    else
     {
         m_session->SendNotification(LANG_INVISIBLE_INVISIBLE);
         m_session->GetPlayer()->SetGMVisible(false);
-        return true;
     }
 
-    SendSysMessage(LANG_USE_BOL);
-    SetSentErrorMessage(true);
-    return false;
+    return true;
 }
 
 bool ChatHandler::HandleGPSCommand(char* args)
@@ -354,7 +349,7 @@ bool ChatHandler::HandleGPSCommand(char* args)
     uint32 have_map = GridMap::ExistMap(obj->GetMapId(),gx,gy) ? 1 : 0;
     uint32 have_vmap = GridMap::ExistVMap(obj->GetMapId(),gx,gy) ? 1 : 0;
 
-    if(have_vmap)
+    if (have_vmap)
     {
         if(map->IsOutdoors(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ()))
             PSendSysMessage("You are OUTdoor");
@@ -1047,7 +1042,8 @@ bool ChatHandler::HandleModifyTalentCommand (char* args)
 //Enable On\OFF all taxi paths
 bool ChatHandler::HandleTaxiCheatCommand(char* args)
 {
-    if (!*args)
+    bool value;
+    if (!ExtractOnOff(&args, value))
     {
         SendSysMessage(LANG_USE_BOL);
         SetSentErrorMessage(true);
@@ -1058,36 +1054,27 @@ bool ChatHandler::HandleTaxiCheatCommand(char* args)
 
     Player *chr = m_session->GetPlayer();
     if (!chr)
-    {
         chr=m_session->GetPlayer();
-    }
-
     // check online security
     else if (HasLowerSecurity(chr, 0))
         return false;
 
-    if (argstr == "on")
+    if (value)
     {
         chr->SetTaxiCheater(true);
         PSendSysMessage(LANG_YOU_GIVE_TAXIS, GetNameLink(chr).c_str());
         if (needReportToTarget(chr))
             ChatHandler(chr).PSendSysMessage(LANG_YOURS_TAXIS_ADDED, GetNameLink().c_str());
-        return true;
     }
-
-    if (argstr == "off")
+    else
     {
         chr->SetTaxiCheater(false);
         PSendSysMessage(LANG_YOU_REMOVE_TAXIS, GetNameLink(chr).c_str());
         if (needReportToTarget(chr))
             ChatHandler(chr).PSendSysMessage(LANG_YOURS_TAXIS_REMOVED, GetNameLink().c_str());
-
-        return true;
     }
 
-    SendSysMessage(LANG_USE_BOL);
-    SetSentErrorMessage(true);
-    return false;
+    return true;
 }
 
 //Edit Player Aspeed
@@ -1669,61 +1656,6 @@ bool ChatHandler::HandleModifyMoneyCommand(char* args)
     return true;
 }
 
-//Edit Unit field
-bool ChatHandler::HandleModifyBitCommand(char* args)
-{
-    if( !*args )
-        return false;
-
-    Unit *unit = getSelectedUnit();
-    if (!unit)
-    {
-        SendSysMessage(LANG_NO_CHAR_SELECTED);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    // check online security
-    if (unit->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity((Player *)unit, 0))
-        return false;
-
-    char* pField = strtok(args, " ");
-    if (!pField)
-        return false;
-
-    char* pBit = strtok(NULL, " ");
-    if (!pBit)
-        return false;
-
-    uint16 field = atoi(pField);
-    uint32 bit   = atoi(pBit);
-
-    if (field < OBJECT_END || field >= unit->GetValuesCount())
-    {
-        SendSysMessage(LANG_BAD_VALUE);
-        SetSentErrorMessage(true);
-        return false;
-    }
-    if (bit < 1 || bit > 32)
-    {
-        SendSysMessage(LANG_BAD_VALUE);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    if ( unit->HasFlag( field, (1<<(bit-1)) ) )
-    {
-        unit->RemoveFlag( field, (1<<(bit-1)) );
-        PSendSysMessage(LANG_REMOVE_BIT, bit, field);
-    }
-    else
-    {
-        unit->SetFlag( field, (1<<(bit-1)) );
-        PSendSysMessage(LANG_SET_BIT, bit, field);
-    }
-    return true;
-}
-
 bool ChatHandler::HandleModifyHonorCommand (char* args)
 {
     if (!*args)
@@ -1846,11 +1778,7 @@ bool ChatHandler::HandleLookupTeleCommand(char * args)
         return false;
     }
 
-    char const* str = strtok(args, " ");
-    if(!str)
-        return false;
-
-    std::string namepart = str;
+    std::string namepart = args;
     std::wstring wnamepart;
 
     if(!Utf8toWStr(namepart,wnamepart))
@@ -1892,26 +1820,28 @@ bool ChatHandler::HandleWhispersCommand(char* args)
         return true;
     }
 
-    std::string argstr = args;
+    bool value;
+    if (!ExtractOnOff(&args, value))
+    {
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
     // whisper on
-    if (argstr == "on")
+    if (value)
     {
         m_session->GetPlayer()->SetAcceptWhispers(true);
         SendSysMessage(LANG_COMMAND_WHISPERON);
-        return true;
     }
-
     // whisper off
-    if (argstr == "off")
+    else
     {
         m_session->GetPlayer()->SetAcceptWhispers(false);
         SendSysMessage(LANG_COMMAND_WHISPEROFF);
-        return true;
     }
 
-    SendSysMessage(LANG_USE_BOL);
-    SetSentErrorMessage(true);
-    return false;
+    return true;
 }
 
 //Save all players in the world
@@ -1962,7 +1892,7 @@ bool ChatHandler::HandleSendMailCommand(char* args)
 // teleport player to given game_tele.entry
 bool ChatHandler::HandleTeleNameCommand(char* args)
 {
-    char* nameStr = ExtractOptArg(&args);
+    char* nameStr = ExtractOptNotLastArg(&args);
 
     Player* target;
     uint64 target_guid;
@@ -2308,24 +2238,19 @@ bool ChatHandler::HandleGoCommand(char* args)
 //teleport at coordinates
 bool ChatHandler::HandleGoXYCommand(char* args)
 {
-    if (!*args)
-        return false;
-
     Player* _player = m_session->GetPlayer();
 
-    char* px = strtok(args, " ");
-    char* py = strtok(NULL, " ");
-    char* pmapid = strtok(NULL, " ");
-
-    if (!px || !py)
+    float x;
+    if (!ExtractFloat(&args, x))
         return false;
 
-    float x = (float)atof(px);
-    float y = (float)atof(py);
+    float y;
+    if (!ExtractFloat(&args, y))
+        return false;
+
     uint32 mapid;
-    if (pmapid)
-        mapid = (uint32)atoi(pmapid);
-    else mapid = _player->GetMapId();
+    if (!ExtractOptUInt32(&args, mapid, _player->GetMapId()))
+        return false;
 
     return HandleGoHelper(_player, mapid, x, y);
 }
@@ -2333,27 +2258,23 @@ bool ChatHandler::HandleGoXYCommand(char* args)
 //teleport at coordinates, including Z
 bool ChatHandler::HandleGoXYZCommand(char* args)
 {
-    if (!*args)
-        return false;
-
     Player* _player = m_session->GetPlayer();
 
-    char* px = strtok(args, " ");
-    char* py = strtok(NULL, " ");
-    char* pz = strtok(NULL, " ");
-    char* pmapid = strtok(NULL, " ");
-
-    if (!px || !py || !pz)
+    float x;
+    if (!ExtractFloat(&args, x))
         return false;
 
-    float x = (float)atof(px);
-    float y = (float)atof(py);
-    float z = (float)atof(pz);
+    float y;
+    if (!ExtractFloat(&args, y))
+        return false;
+
+    float z;
+    if (!ExtractFloat(&args, z))
+        return false;
+
     uint32 mapid;
-    if (pmapid)
-        mapid = (uint32)atoi(pmapid);
-    else
-        mapid = _player->GetMapId();
+    if (!ExtractOptUInt32(&args, mapid, _player->GetMapId()))
+        return false;
 
     return HandleGoHelper(_player, mapid, x, y, &z);
 }
@@ -2420,21 +2341,19 @@ bool ChatHandler::HandleGoZoneXYCommand(char* args)
 //teleport to grid
 bool ChatHandler::HandleGoGridCommand(char* args)
 {
-    if (!*args)
-        return false;
-
     Player* _player = m_session->GetPlayer();
 
-    char* px = strtok(args, " ");
-    char* py = strtok(NULL, " ");
-    char* pmapid = strtok(NULL, " ");
-
-    if (!px || !py)
+    float grid_x;
+    if (!ExtractFloat(&args, grid_x))
         return false;
 
-    float grid_x = (float)atof(px);
-    float grid_y = (float)atof(py);
-    uint32 mapid = pmapid ? (uint32)atoi(pmapid) : _player->GetMapId();
+    float grid_y;
+    if (!ExtractFloat(&args, grid_y))
+        return false;
+
+    uint32 mapid;
+    if (!ExtractOptUInt32(&args, mapid, _player->GetMapId()))
+        return false;
 
     // center of grid
     float x = (grid_x-CENTER_GRID_ID+0.5f)*SIZE_OF_GRIDS;
