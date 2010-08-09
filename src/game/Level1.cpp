@@ -920,60 +920,6 @@ bool ChatHandler::HandleModifyFactionCommand(char* args)
     return true;
 }
 
-//Edit Player Spell
-bool ChatHandler::HandleModifySpellCommand(char* args)
-{
-    if(!*args) return false;
-    char* pspellflatid = strtok(args, " ");
-    if (!pspellflatid)
-        return false;
-
-    char* pop = strtok(NULL, " ");
-    if (!pop)
-        return false;
-
-    char* pval = strtok(NULL, " ");
-    if (!pval)
-        return false;
-
-    uint16 mark;
-
-    char* pmark = strtok(NULL, " ");
-
-    uint8 spellflatid = atoi(pspellflatid);
-    uint8 op   = atoi(pop);
-    uint16 val = atoi(pval);
-    if(!pmark)
-        mark = 65535;
-    else
-        mark = atoi(pmark);
-
-    Player *chr = m_session->GetPlayer();
-    if (chr == NULL)
-    {
-        SendSysMessage(LANG_NO_CHAR_SELECTED);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    // check online security
-    if (HasLowerSecurity(chr, 0))
-        return false;
-
-    PSendSysMessage(LANG_YOU_CHANGE_SPELLFLATID, spellflatid, val, mark, GetNameLink(chr).c_str());
-    if (needReportToTarget(chr))
-        ChatHandler(chr).PSendSysMessage(LANG_YOURS_SPELLFLATID_CHANGED, GetNameLink().c_str(), spellflatid, val, mark);
-
-    WorldPacket data(SMSG_SET_FLAT_SPELL_MODIFIER, (1+1+2+2));
-    data << uint8(spellflatid);
-    data << uint8(op);
-    data << uint16(val);
-    data << uint16(mark);
-    chr->GetSession()->SendPacket(&data);
-
-    return true;
-}
-
 //Edit Player TP
 bool ChatHandler::HandleModifyTalentCommand (char* args)
 {
