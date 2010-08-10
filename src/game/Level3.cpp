@@ -2134,6 +2134,15 @@ bool ChatHandler::HandleAddItemCommand(char* args)
         return false;
     }
 
+	// Restriction des items ( TEST )
+    QueryResult *disabled = WorldDatabase.PQuery("SELECT entry FROM item_disabled WHERE id = '%s'", itemId);
+    if (disabled)
+    {
+	    PSendSysMessage(LANG_ITEM_DISABLED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+	
     //Subtract
     if (count < 0)
     {
