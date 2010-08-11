@@ -2114,7 +2114,7 @@ bool ChatHandler::HandleAddItemCommand(char* args)
         itemId = result->Fetch()->GetUInt16();
         delete result;
     }
-
+	
     int32 count;
     if (!ExtractOptInt32(&args, count, 1))
         return false;
@@ -2123,7 +2123,7 @@ bool ChatHandler::HandleAddItemCommand(char* args)
     Player* plTarget = pl;
 
     DETAIL_LOG(GetMangosString(LANG_ADDITEM), itemId, count);
-
+	
     ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(itemId);
     if(!pProto)
     {
@@ -2131,15 +2131,16 @@ bool ChatHandler::HandleAddItemCommand(char* args)
         SetSentErrorMessage(true);
         return false;
     }
-
-//	// Restriction des items ( TEST )
-//    QueryResult *disabled = WorldDatabase.PQuery("SELECT entry FROM item_disabled WHERE id = '%s'", itemId);
-//    if (disabled)
-//    {
-//	    PSendSysMessage(LANG_ITEM_DISABLED);
-//        SetSentErrorMessage(true);
-//        return false;
-//    }
+	
+    // Restriction des items
+	QueryResult *disabled;
+	disabled = WorldDatabase.PQuery("SELECT active FROM item_disabled WHERE id = '%u'", itemId);
+    if (disabled)
+    {
+	    PSendSysMessage(LANG_ITEM_DISABLED);
+        SetSentErrorMessage(true);
+        return false;
+    }
 	
     //Subtract
     if (count < 0)
