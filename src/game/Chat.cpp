@@ -2204,33 +2204,40 @@ char* ChatHandler::ExtractLiteralArg(char** args, char const* lit /*= NULL*/)
 
     if (lit)
     {
-        int diff = strncmp(head, lit, strlen(lit));
+        int l = strlen(lit);
+        int diff = strncmp(head, lit, l);
 
-        if (diff > 0)
+        if (diff != 0)
             return NULL;
 
-        if (diff < 0 && !head[-diff] && !isWhiteSpace(head[-diff]))
+        if (head[l] && !isWhiteSpace(head[l]))
             return NULL;
 
         char* arg = head;
 
-        if (head[-diff])
+        if (head[l])
         {
-            head[-diff] = '\0';
+            head[l] = '\0';
 
-            head += -diff + 1;
+            head += l + 1;
 
             *args = head;
         }
         else
-            *args = NULL;
+            *args = head + l;
 
         SkipWhiteSpaces(args);
         return arg;
     }
 
     char* name = strtok(head, " ");
-    *args = strtok(NULL, "");
+
+    char* tail = strtok(NULL, "");
+
+    *args = tail ? tail : (char*)"";                        // *args don't must be NULL
+
+    SkipWhiteSpaces(args);
+
     return name;
 }
 
@@ -2257,7 +2264,8 @@ char* ChatHandler::ExtractQuotedArg( char** args )
 
     char* str = strtok((*args)+1, guard);                   // skip start guard symbol
 
-    *args = strtok(NULL, "");
+    char* tail = strtok(NULL, "");
+    *args = tail ? tail : (char*)"";                        // *args don't must be NULL
 
     SkipWhiteSpaces(args);
 
@@ -2524,7 +2532,7 @@ char* ChatHandler::ExtractOptNotLastArg(char** args)
         return arg;
 
     // optional name not found
-    *args = arg;
+    *args = arg ? arg : (char*)"";                          // *args don't must be NULL
 
     return NULL;
 }
