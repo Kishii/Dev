@@ -911,9 +911,7 @@ bool ChatHandler::HandleReloadMailLevelRewardCommand(char* /*args*/)
 bool ChatHandler::HandleReloadSpellDisabledCommand(char* /*arg*/)
 {
     sLog.outString( "Re-Loading spell disabled table...");
-
     sObjectMgr.LoadSpellDisabledEntrys();
-
     SendGlobalSysMessage("DB table `spell_disabled` reloaded.");
     return true;
 }
@@ -2062,7 +2060,7 @@ bool ChatHandler::HandleLearnCommand(char* args)
         return false;
 
     bool allRanks = ExtractLiteralArg(&args, "all") != NULL;
-    if (!allRanks && *args)                                 // can be fail also at syntax error
+    if (!allRanks && *args) // can be fail also at syntax error
         return false;
 
     SpellEntry const* spellInfo = sSpellStore.LookupEntry(spell);
@@ -2134,14 +2132,14 @@ bool ChatHandler::HandleAddItemCommand(char* args)
         return false;
     }
 
-	// Restriction des items ( TEST )
-    QueryResult *disabled = WorldDatabase.PQuery("SELECT entry FROM item_disabled WHERE id = '%s'", itemId);
-    if (disabled)
-    {
-	    PSendSysMessage(LANG_ITEM_DISABLED);
-        SetSentErrorMessage(true);
-        return false;
-    }
+//	// Restriction des items ( TEST )
+//    QueryResult *disabled = WorldDatabase.PQuery("SELECT entry FROM item_disabled WHERE id = '%s'", itemId);
+//    if (disabled)
+//    {
+//	    PSendSysMessage(LANG_ITEM_DISABLED);
+//        SetSentErrorMessage(true);
+//        return false;
+//    }
 	
     //Subtract
     if (count < 0)
