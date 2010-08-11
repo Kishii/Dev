@@ -1586,8 +1586,10 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     if (!m_caster || !m_caster->isAlive())
                         return;
 
-                    ((Player*)m_originalCaster->GetCharmer())->KilledMonsterCredit(m_caster->GetEntry(), m_caster->GetGUID());
-                        return;
+                    if(m_originalCaster && m_originalCaster->GetCharmer())
+                        if(m_originalCaster->GetCharmer()->GetTypeId() == TYPEID_PLAYER)
+                            ((Player*)m_originalCaster->GetCharmer())->KilledMonsterCredit(m_caster->GetEntry(), 0);
+							    return;
                 }
                 case 51866:                                 // Kick Nass
                 {
@@ -5788,7 +5790,7 @@ void Spell::EffectInterruptCast(SpellEffectIndex eff_idx)
             // check if we can interrupt spell
             if ((curSpellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_INTERRUPT) && curSpellInfo->PreventionType == SPELL_PREVENTION_TYPE_SILENCE )
             {
-                unitTarget->ProhibitSpellSchool(GetSpellSchoolMask(curSpellInfo), unitTarget->CalculateBaseSpellDuration(m_spellInfo));
+                unitTarget->ProhibitSpellSchool(GetSpellSchoolMask(curSpellInfo), unitTarget->CalculateSpellDuration(m_spellInfo, eff_idx, unitTarget));
 				
                 unitTarget->InterruptSpell(CurrentSpellTypes(i),false);
             }
