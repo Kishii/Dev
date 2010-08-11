@@ -7,5 +7,5 @@ DROP TABLE IF EXISTS `item_disabled`;
 CREATE TABLE `item_disabled` (
   `id` int(11) unsigned NOT NULL default '0' COMMENT 'Id de l\'item',
   `active` tinyint(3) unsigned NOT NULL default '1' COMMENT 'On / Off',
-  PRIMARY KEY  (`entry`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Interdiction d\'items';
