@@ -894,12 +894,11 @@ enum MangosStrings
 
     // Reserved for old client release branches specific strings
     // Room for old clients 2.x           1300-1399 not used
+    LANG_AUTO_BROADCAST                 = 1300,    // Broadcaster
+    LANG_ITEM_DISABLED                  = 1301,
     // Room for old clients 1.x           1400-1499 not used
 
     // FREE IDS                           1500-9999
-
-    // Broadcaster
-    LANG_AUTO_BROADCAST                 = 1300,
 	
     // Use for not-in-offcial-sources patches
     //                                    10000-10999
