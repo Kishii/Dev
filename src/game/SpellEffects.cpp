@@ -2906,6 +2906,14 @@ void Spell::EffectTriggerSpell(SpellEffectIndex effIndex)
                 m_caster->CastSpell(m_caster, 65047, true); // Mirror Image
             break;
         }
+        // Empower Rune Weapon
+        case 53258:
+        {
+            if (m_caster->getClass() == CLASS_DEATH_KNIGHT && m_caster->GetTypeId() == TYPEID_PLAYER)
+                for(uint32 i; i <= MAX_RUNES; ++i)
+                    ((Player*)m_caster)->SetRuneCooldown(i, 0);
+            return;
+        }
     }
 
     // normal case
