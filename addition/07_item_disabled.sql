@@ -1,4 +1,4 @@
-INSERT INTO `mangos_string` VALUES ('1301', 'L\'équipement n\'existe pas ou à été interdit.', null, 'L\'équipement n\'existe pas ou à été interdit.', null, null, null, null, null, 'L\'équipement n\'existe pas ou à été interdit.');
+INSERT INTO `mangos_string` VALUES ('1301', 'Vous ne pouvez pas vous ajouter cette item.', null, 'Vous ne pouvez pas vous ajouter cette item.', null, null, null, null, null, 'Vous ne pouvez pas vous ajouter cette item.');
 
 -- ----------------------------
 -- Table structure for `item_disabled`
