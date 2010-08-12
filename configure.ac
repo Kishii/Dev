@@ -13,10 +13,10 @@
 # TODO: create m4 directory and put the checks there, because this file got realy poluted ( by Derex )
 
 ## Prelude, basic settings for Autoconf
-#  PACKAGE:            mangos
-#  VERSION:            0.17.0 (trunk)
-#  BUG-REPORT-ADDRESS: mangos-devs@lists.sourceforge.net
-AC_INIT( [mangos], [0.17.0], [mangos-devs@lists.sourceforge.net])
+#  PACKAGE:            Gmisland
+#  VERSION:            1.0 (trunk)
+#  BUG-REPORT-ADDRESS: contact@gmisland.fr
+AC_INIT( [Gmisland], [1.0], [contact@gmisland.fr])
 AC_CONFIG_SRCDIR([src/shared/Common.h])
 AC_CONFIG_MACRO_DIR([m4])
 

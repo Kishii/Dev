@@ -1103,8 +1103,8 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     if (!roll_chance_i(triggerAmount))
                         return SPELL_AURA_PROC_FAILED;
 
-                    Aura *aur = GetAura(71905, EFFECT_INDEX_0);
-                    if (aur && uint32(aur->GetStackAmount() + 1) >= aur->GetSpellProto()->StackAmount)
+                    SpellAuraHolder *aurHolder = GetSpellAuraHolder(71905);
+                    if (aurHolder && uint32(aurHolder->GetStackAmount() + 1) >= aurHolder->GetSpellProto()->StackAmount)
                     {
                         RemoveAurasDueToSpell(71905);
                         CastSpell(this, 71904, true);       // Chaos Bane
@@ -2183,38 +2183,30 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     target = this;
                     break;
                 }
-                case 71406:                                         //Tiny Abomination in a Jar 25N Proc
+                // Anger Capacitor
+                case 71406:                                 // normal
+                case 71545:                                 // heroic
                 {
-                    Aura *aura = GetAura(71432,EFFECT_INDEX_0);     //Mote of Anger
-                    if(aura && aura->GetStackAmount() >= 7)
+                    if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    SpellEntry const* mote = sSpellStore.LookupEntry(71432);
+                    if (!mote)
+                        return SPELL_AURA_PROC_FAILED;
+                    uint32 maxStack = mote->StackAmount - (dummySpell->Id == 71545 ? 1 : 0);
+
+                    SpellAuraHolder *aurHolder = GetSpellAuraHolder(71432);
+                    if (aurHolder && uint32(aurHolder->GetStackAmount() +1) >= maxStack)
                     {
-                        RemoveAurasDueToSpell(71432);
-                        if (haveOffhandWeapon() && getAttackTimer(BASE_ATTACK) > getAttackTimer(OFF_ATTACK))
-                            CastSpell(getVictim(),71434,true);      //Off-hand "Manifest Anger" (50% instant weapon damage)
-                        else
-                            CastSpell(getVictim(),71433,true);      //Main-hand "Manifest Anger" (50% instant weapon damage)
+                        RemoveAurasDueToSpell(71432);       // Mote of Anger
+
+                        // Manifest Anger (main hand/off hand)
+                        CastSpell(pVictim, !haveOffhandWeapon() || roll_chance_i(50) ? 71433 : 71434, true);
                         return SPELL_AURA_PROC_OK;
                     }
                     else
                         triggered_spell_id = 71432;
-                    target = this;
-                    break;
-                }
-                case 71545:                                 //Tiny Abomination in a Jar 25H Proc
-                {
-                    Aura *aura = GetAura(71432,EFFECT_INDEX_0);
-                    if(aura && aura->GetStackAmount() >= 6)
-                    {
-                        RemoveAurasDueToSpell(71432);
-                        if (haveOffhandWeapon() && getAttackTimer(BASE_ATTACK) > getAttackTimer(OFF_ATTACK))
-                            CastSpell(getVictim(),71434,true);      //Off-hand "Manifest Anger" (50% instant weapon damage)
-                        else
-                            CastSpell(getVictim(),71433,true);      //Main-hand "Manifest Anger" (50% instant weapon damage)
-                        return SPELL_AURA_PROC_OK;
-                    }
-                    else
-                        triggered_spell_id = 71432;
-                    target = this;
+
                     break;
                 }
             }

@@ -4467,7 +4467,7 @@ bool ChatHandler::HandleLookupAccountEmailCommand(char* args)
     if (!ExtractOptUInt32(&args, limit, 100))
         return false;
 
-	std::string email = emailStr;
+    std::string email = emailStr;
     LoginDatabase.escape_string(email);
     //                                                 0   1         2        3        4
     QueryResult *result = LoginDatabase.PQuery("SELECT id, username, last_ip, gmlevel, expansion FROM account WHERE email "_LIKE_" "_CONCAT3_("'%%'","'%s'","'%%'"), email.c_str ());
@@ -4485,7 +4485,7 @@ bool ChatHandler::HandleLookupAccountIpCommand(char* args)
     if (!ExtractOptUInt32(&args, limit, 100))
         return false;
 
-	std::string ip = ipStr;
+    std::string ip = ipStr;
     LoginDatabase.escape_string(ip);
 
     //                                                 0   1         2        3        4
@@ -4595,7 +4595,7 @@ bool ChatHandler::HandleLookupPlayerAccountCommand(char* args)
     if (!ExtractOptUInt32(&args, limit, 100))
         return false;
 
-	std::string account = accountStr;
+    std::string account = accountStr;
     if (!AccountMgr::normalizeString(account))
         return false;
 
