@@ -2754,7 +2754,42 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 m_caster->CastSpell(unitTarget, 49560, true);
                 return;
             }
-            break;
+            // Obliterate
+            else if (m_spellInfo->SpellFamilyFlags & UI64LIT(0x0002000000000000))
+            {
+                // search for Annihilation
+                Unit::AuraList const& dummyList = m_caster->GetAurasByType(SPELL_AURA_DUMMY);
+                for (Unit::AuraList::const_iterator itr = dummyList.begin(); itr != dummyList.end(); ++itr)
+                {
+                    if ((*itr)->GetSpellProto()->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && (*itr)->GetSpellProto()->SpellIconID == 2710)
+                        if (roll_chance_i((*itr)->GetModifier()->m_amount)) // don't consume if found
+                            return;
+                }
+ 
+                // consume diseases
+                Unit::SpellAuraHolderMap& Auras = unitTarget->GetSpellAuraHolderMap();
+                for(Unit::SpellAuraHolderMap::iterator iter = Auras.begin(); iter != Auras.end();)
+                {
+                    // Remove diseases from target
+                    if (iter->second->GetCasterGUID() == m_caster->GetGUID() && 
+                       (iter->second->GetSpellProto()->Id == 55095      // Frost Fever
+                        || iter->second->GetSpellProto()->Id == 55078   // Blood Plague
+                        || iter->second->GetSpellProto()->Id == 51735   // Ebon Plague (Rank 3)
+                        || iter->second->GetSpellProto()->Id == 51734   // Ebon Plague (Rank 2)
+                        || iter->second->GetSpellProto()->Id == 51726   // Ebon Plague (Rank 1)
+                        || iter->second->GetSpellProto()->Id == 50510   // Crypt Fever (Rank 3)
+                        || iter->second->GetSpellProto()->Id == 50509   // Crypt Fever (Rank 2)
+                        || iter->second->GetSpellProto()->Id == 50508)) // Crypt Fever (Rank 1)
+                    {
+                        unitTarget->RemoveAurasDueToSpell(iter->second->GetSpellProto()->Id);
+                        iter = Auras.begin();
+                    }
+                    else
+                        ++iter;
+                }
+                return;
+            }
+           break;
         }
     }
 
@@ -2926,14 +2961,6 @@ void Spell::EffectTriggerSpell(SpellEffectIndex effIndex)
             if (m_caster->HasAura(63093))
                 m_caster->CastSpell(m_caster, 65047, true); // Mirror Image
             break;
-        }
-        // Empower Rune Weapon
-        case 53258:
-        {
-            if (m_caster->getClass() == CLASS_DEATH_KNIGHT && m_caster->GetTypeId() == TYPEID_PLAYER)
-                for(uint32 i; i <= MAX_RUNES; ++i)
-                    ((Player*)m_caster)->SetRuneCooldown(i, 0);
-            return;
         }
     }
 
