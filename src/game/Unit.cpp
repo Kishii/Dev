@@ -1889,10 +1889,11 @@ uint32 Unit::CalcArmorReducedDamage(Unit* pVictim, const uint32 damage)
     if (GetTypeId()==TYPEID_PLAYER)
 	{
         float maxArmorPen = 0.0f;
+		
 		if (getLevel() < 60 )
             maxArmorPen = 400+85*pVictim->getLevel();
         else
-            maxArmorPen = 400+85*pVictim->getLevel()+4.5*85*(pVictim->getLevel()-59);
+            maxArmorPen = 400+85*pVictim->getLevel()+4.5f*85*(pVictim->getLevel()-59);
 
         maxArmorPen = std::min(((armor+maxArmorPen)/3),armor);
 		//float armorPen = maxArmorPen*((Player*)this)->GetArmorPenetrationPct() / 100.0f;
