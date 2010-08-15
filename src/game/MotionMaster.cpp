@@ -69,7 +69,10 @@ MotionMaster::UpdateMotion(uint32 diff)
 {
     if( i_owner->hasUnitState(UNIT_STAT_CAN_NOT_MOVE) )
         return;
-    ASSERT( !empty() );
+
+    if(empty())
+        return;
+
     m_cleanFlag |= MMCF_UPDATE;
     if (!top()->Update(*i_owner, diff))
     {
