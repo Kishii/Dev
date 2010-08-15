@@ -5178,7 +5178,7 @@ void Aura::HandlePeriodicDamage(bool apply, bool Real)
                 //Frost Fever and Blood Plague AP scale
                 if (spellProto->SpellFamilyFlags & UI64LIT(0x400080000000000))
                 {
-                    if (caster->HasSpell(49632))
+					if (caster->HasSpell(49632) || caster->HasSpell(51099) || caster->HasSpell(51160) || caster->HasSpell(51161))
                         m_modifier.m_amount += int32((caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.055f * 1.15f)*1.30f);  // Crypt Fever (Rank 3) - 30% more damage.
                     else if (caster->HasSpell(49631))
                         m_modifier.m_amount += int32((caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.055f * 1.15f)*1.20f);  // Crypt Fever (Rank 2) - 20% more damage.
