@@ -1774,8 +1774,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
 				// Tiger's Fury
 				if (procSpell->SpellFamilyFlags2 & 0x800 && effIndex == 1)
 				{
-					//basepoints[0] = triggerAmount;
-					basepoints[0] = (triggerAmount * GetMaxPower(POWER_RAGE) / 100);
+					basepoints[0] = triggerAmount;
 					triggered_spell_id = 51178;
 					target = this;
 					break;
@@ -1783,8 +1782,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
 				// Enrage
 				if (procSpell->Id == 5229 && effIndex == 0)
 				{
-					//basepoints[0] = triggerAmount;
-					basepoints[0] = (triggerAmount * GetMaxPower(POWER_RAGE) / 100);
+					basepoints[0] = triggerAmount;
 					triggered_spell_id = 51185;
 					target = this;
 					break;

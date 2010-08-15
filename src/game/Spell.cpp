@@ -3008,6 +3008,13 @@ void Spell::cast(bool skipCheck)
                 // Berserk (Bear/Direbear Mangle affecting up to 3 targets)	
             else if (m_spellInfo->Id == 50334)	
                 AddTriggeredSpell(58923);
+            else if (m_spellInfo->SpellFamilyFlags2 & 0x00000800  && m_caster->m_form == FORM_CAT)
+                if (m_caster->HasSpell(48495))
+                    m_caster->SetPower(POWER_ENERGY, m_caster->GetPower(POWER_ENERGY) + 60);
+                else if (m_caster->HasSpell(48494))
+                    m_caster->SetPower(POWER_ENERGY, m_caster->GetPower(POWER_ENERGY) + 40);
+                else if (m_caster->HasSpell(48492))
+                    m_caster->SetPower(POWER_ENERGY, m_caster->GetPower(POWER_ENERGY) + 20);
             break;
         }
         case SPELLFAMILY_ROGUE:
