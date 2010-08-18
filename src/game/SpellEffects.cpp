@@ -1588,7 +1588,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                        if (entry != 27986 && entry != 28047 && entry != 28568) //prevent exploits
                             SendCastResult(SPELL_FAILED_BAD_TARGETS);
                        else
-                            ((Player*)unitTarget)->KilledMonsterCredit(entry, 0);
+                            ((Player*)unitTarget)->KilledMonsterCredit(m_spellInfo->EffectMiscValue[eff_idx]);
                     }
                     return;
                 }
@@ -1623,7 +1623,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                     if(m_originalCaster && m_originalCaster->GetCharmer())
                         if(m_originalCaster->GetCharmer()->GetTypeId() == TYPEID_PLAYER)
-                            ((Player*)m_originalCaster->GetCharmer())->KilledMonsterCredit(m_caster->GetEntry(), 0);
+                            ((Player*)unitTarget)->KilledMonsterCredit(m_spellInfo->EffectMiscValue[eff_idx]);
 							    return;
                 }
                 case 51866:                                 // Kick Nass
@@ -6739,56 +6739,6 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     if (uint32 discoveredSpell = GetExplicitDiscoverySpell(m_spellInfo->Id, (Player*)m_caster))
                         ((Player*)m_caster)->learnSpell(discoveredSpell, false);
 
-                    return;
-                }
-                case 60123: // Lightwell
-                {
-                   if (m_caster->GetTypeId() != TYPEID_UNIT)
-                       return;
-
-
-                    uint32 spellID;
-                    uint32 entry  = m_caster->GetEntry();
-
- 
-                    switch(entry)
-                    {
-                        case 31897: spellID = 7001; break;   // Lightwell Renew	Rank 1
-                        case 31896: spellID = 27873; break;  // Lightwell Renew	Rank 2
-                        case 31895: spellID = 27874; break;  // Lightwell Renew	Rank 3
-                        case 31894: spellID = 28276; break;  // Lightwell Renew	Rank 4
-                        case 31893: spellID = 48084; break;  // Lightwell Renew	Rank 5
-                        case 31883: spellID = 48085; break;  // Lightwell Renew	Rank 6
-                        default:
-                            sLog.outError("Unknown Lightwell spell caster %u", m_caster->GetEntry());
-                            return;
-                    }
-
-
-                    if (Unit *owner = m_caster->GetOwner())
-                    {
-
-                       if (const SpellEntry *pSpell = sSpellStore.LookupEntry(spellID))
-                      {
-
-                        damage = owner->SpellHealingBonusDone(unitTarget, pSpell, pSpell->EffectBasePoints[EFFECT_INDEX_0], DOT);
-                        damage = unitTarget->SpellHealingBonusTaken(owner, pSpell, damage, DOT);
-
-                        if (Aura *dummy = owner->GetDummyAura(55673))
-                           damage += damage * dummy->GetModifier()->m_amount /100.0f;
-                      }
-
-
-                    }
-
-                    Aura* chargesaura = m_caster->GetAura(59907,EFFECT_INDEX_0);
-                    if(chargesaura && chargesaura->GetHolder()->GetAuraCharges() >= 1)
-                     {
-                       chargesaura->GetHolder()->SetAuraCharges(chargesaura->GetHolder()->GetAuraCharges() - 1);
-                       m_caster->CastCustomSpell(unitTarget, spellID, &damage, NULL, NULL, true, NULL, NULL, m_originalCasterGUID);
-                     }
-                    else
-                       ((TemporarySummon*)m_caster)->UnSummon();
                     return;
                 }
                 // Glyph of Starfire

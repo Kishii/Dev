@@ -489,7 +489,7 @@ void Unit::SendMonsterMoveTransport(Unit *vehicle)
      SendMessageToSet(&data, true);
 }
 
-+bool Unit::SetPosition(float x, float y, float z, float orientation, bool teleport)
+bool Unit::SetPosition(float x, float y, float z, float orientation, bool teleport)
 {
      // prevent crash when a bad coord is sent by the client
      if (!MaNGOS::IsValidMapCoord(x, y, z, orientation))
@@ -8937,7 +8937,6 @@ bool Unit::SelectHostileTarget()
 
 int32 Unit::CalculateSpellDamage(Unit const* target, SpellEntry const* spellProto, SpellEffectIndex effect_index, int32 const* effBasePoints)
 {
-    Player* unitPlayer = (GetTypeId() == TYPEID_PLAYER) ? (Player*)this : NULL;
     Player* unitPlayer;
 
     if(GetTypeId() == TYPEID_PLAYER)
