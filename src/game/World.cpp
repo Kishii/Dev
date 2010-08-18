@@ -1236,6 +1236,12 @@ void World::SetInitialWorldSettings()
     sLog.outString( "Loading Scripts text locales..." );    // must be after Load*Scripts calls
     sObjectMgr.LoadDbScriptStrings();
 
+    sLog.outString( "Loading Vehicle Data..." );
+    sObjectMgr.LoadVehicleData();
+
+    sLog.outString( "Loading Vehicle Seat Data..." );
+    sObjectMgr.LoadVehicleSeatData();
+	
     sLog.outString( "Loading CreatureEventAI Texts...");
     sEventAIMgr.LoadCreatureEventAI_Texts(false);       // false, will checked in LoadCreatureEventAI_Scripts
 

@@ -28,6 +28,7 @@
 #include "Group.h"
 #include "SocialMgr.h"
 #include "Util.h"
+#include "Vehicle.h"
 
 /* differeces from off:
     -you can uninvite yourself - is is useful
@@ -713,7 +714,7 @@ void WorldSession::BuildPartyMemberStatsChangedPacket(Player *player, WorldPacke
         }
     }
 
-    Pet *pet = player->GetPet();
+    Unit *pet = player->GetCharmOrPet();
     if (mask & GROUP_UPDATE_FLAG_PET_GUID)
     {
         if(pet)
@@ -796,6 +797,11 @@ void WorldSession::BuildPartyMemberStatsChangedPacket(Player *player, WorldPacke
         else
             *data << uint64(0);
     }
+
+    if (mask & GROUP_UPDATE_FLAG_VEHICLE_SEAT)
+    {
+        *data << (uint32) player->m_movementInfo.GetTransportDBCSeat();
+    }
 }
 
 /*this procedure handles clients CMSG_REQUEST_PARTY_MEMBER_STATS request*/
@@ -817,7 +823,7 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode( WorldPacket &recv_data )
         return;
     }
 
-    Pet *pet = player->GetPet();
+    Unit *pet = player->GetCharmOrPet();
 
     WorldPacket data(SMSG_PARTY_MEMBER_STATS_FULL, 4+2+2+2+1+2*6+8+1+8);
     data << uint8(0);                                       // only for SMSG_PARTY_MEMBER_STATS_FULL, probably arena/bg related
@@ -825,7 +831,7 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode( WorldPacket &recv_data )
 
     uint32 mask1 = 0x00040BFF;                              // common mask, real flags used 0x000040BFF
     if(pet)
-        mask1 = 0x7FFFFFFF;                                 // for hunters and other classes with pets
+        mask1 = 0xFFFFFFFF;                                 // for hunters and other classes with pets
 
     Powers powerType = player->getPowerType();
     data << uint32(mask1);                                  // group update mask
@@ -878,7 +884,7 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode( WorldPacket &recv_data )
                 data << uint8(1);
             }
         }
-        data.put<uint64>(petMaskPos, petauramask);          // GROUP_UPDATE_FLAG_PET_AURAS
+        data << (uint32) player->m_movementInfo.GetTransportDBCSeat();
     }
     else
     {
