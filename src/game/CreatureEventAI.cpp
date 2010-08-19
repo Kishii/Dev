@@ -350,10 +350,41 @@ bool CreatureEventAI::ProcessEvent(CreatureEventAIHolder& pHolder, Unit* pAction
     if (pHolder.Event.event_chance <= rnd % 100)
         return false;
 
-    //Process actions
-    for (uint32 j = 0; j < MAX_ACTIONS; j++)
-        ProcessAction(pHolder.Event.action[j], rnd, pHolder.Event.event_id, pActionInvoker);
+    //Process actions, normal case
+    if (!(pHolder.Event.event_flags & EFLAG_RANDOM_ACTION))
+    {
+        for (uint32 j = 0; j < MAX_ACTIONS; ++j)
+            ProcessAction(pHolder.Event.action[j], rnd, pHolder.Event.event_id, pActionInvoker);
+    }
+    //Process actions, random case
+    else
+    {
+        // amount of real actions
+        uint32 count = 0;
+        for (uint32 j = 0; j < MAX_ACTIONS; j++)
+            if (pHolder.Event.action[j].type != ACTION_T_NONE)
+                ++count;
 
+        if (count)
+        {
+            // select action number from found amount
+            uint32 idx = urand(0,count-1);
+
+            // find selected action, skipping not used
+            uint32 j = 0;
+            for (; ; ++j)
+            {
+                if (pHolder.Event.action[j].type != ACTION_T_NONE)
+                {
+                    if (!idx)
+                        break;
+                    --idx;
+                }
+            }
+
+            ProcessAction(pHolder.Event.action[j], rnd, pHolder.Event.event_id, pActionInvoker);
+        }
+    }
     return true;
 }
 
@@ -425,7 +456,7 @@ void CreatureEventAI::ProcessAction(CreatureEventAI_Action const& action, uint32
                 {
                     if (CreatureInfo const* ci = GetCreatureTemplateStore(action.morph.creatureId))
                     {
-                        uint32 display_id = Creature::ChooseDisplayId(0,ci);
+                        uint32 display_id = Creature::ChooseDisplayId(ci);
                         m_creature->SetDisplayId(display_id);
                     }
                 }
@@ -786,7 +817,7 @@ void CreatureEventAI::ProcessAction(CreatureEventAI_Action const& action, uint32
                 {
                     if (CreatureInfo const* cInfo = GetCreatureTemplateStore(action.mount.creatureId))
                     {
-                        uint32 display_id = Creature::ChooseDisplayId(0, cInfo);
+                        uint32 display_id = Creature::ChooseDisplayId(cInfo);
                         m_creature->Mount(display_id);
                     }
                 }
