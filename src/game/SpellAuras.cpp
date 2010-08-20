@@ -6222,12 +6222,6 @@ void Aura::HandleShapeshiftBoosts(bool apply)
         case FORM_SHADOW:
             spellId1 = 49868;
             spellId2 = 71167;
- 
-            if(target->GetTypeId() == TYPEID_PLAYER)      // Spell 49868 and 71167 have same category as main form spell and share cooldown
-            {
-                ((Player*)target)->RemoveSpellCooldown(49868);
-                ((Player*)target)->RemoveSpellCooldown(71167);
-            }
             break;
         case FORM_GHOSTWOLF:
             spellId1 = 67116;
@@ -6242,14 +6236,27 @@ void Aura::HandleShapeshiftBoosts(bool apply)
 
     if(apply)
     {
-        if (spellId1)
-            target->CastSpell(target, spellId1, true, NULL, this );
-        if (spellId2)
-            target->CastSpell(target, spellId2, true, NULL, this);
+        Player* player = target->GetTypeId() == TYPEID_PLAYER ? (Player*)target : NULL;
 
-        if (target->GetTypeId() == TYPEID_PLAYER)
+        if (spellId1)
         {
-            const PlayerSpellMap& sp_list = ((Player *)target)->GetSpellMap();
+            if (player && player->HasSpellCooldown(spellId1))
+                player->RemoveSpellCooldown(spellId1, true);
+
+            target->CastSpell(target, spellId1, true, NULL, this );
+        }
+
+        if (spellId2)
+        {
+            if (player && player->HasSpellCooldown(spellId2))
+                player->RemoveSpellCooldown(spellId2, true);
+
+            target->CastSpell(target, spellId2, true, NULL, this);
+        }
+
+        if (player)
+        {
+            const PlayerSpellMap& sp_list = player->GetSpellMap();
             for (PlayerSpellMap::const_iterator itr = sp_list.begin(); itr != sp_list.end(); ++itr)
             {
                 if (itr->second.state == PLAYERSPELL_REMOVED) continue;
@@ -6293,7 +6300,7 @@ void Aura::HandleShapeshiftBoosts(bool apply)
             }
 
             // Leader of the Pack
-            if (((Player*)target)->HasSpell(17007))
+            if (player->HasSpell(17007))
             {
                 SpellEntry const *spellInfo = sSpellStore.LookupEntry(24932);
                 if (spellInfo && spellInfo->Stances & (1<<(form-1)))
@@ -6301,7 +6308,7 @@ void Aura::HandleShapeshiftBoosts(bool apply)
             }
 
             // Savage Roar
-            if (form == FORM_CAT && ((Player*)target)->HasAura(52610))
+            if (form == FORM_CAT && target->HasAura(52610))
                 target->CastSpell(target, 62071, true);
 
             // Improved Moonkin Form
