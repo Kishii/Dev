@@ -428,6 +428,13 @@ SpellSpecific GetSpellSpecific(uint32 spellId)
                 return SPELL_WELL_FED;
             break;
         }
+        case SPELLFAMILY_DRUID:
+        {
+            // Mangle (Cat/Bear)
+            if (spellInfo->SpellFamilyFlags & UI64LIT(0x44000000000))
+                return SPELL_BLEED_DEBUFF;
+            break;
+        }
         case SPELLFAMILY_HUNTER:
         {
             // only hunter stings have this
