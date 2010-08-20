@@ -1507,8 +1507,18 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 // Divine Aegis
                 case 2820:
                 {
+                    if (!pVictim || !pVictim->isAlive())
+                        return false;
+
                     basepoints[0] = damage * triggerAmount/100;
                     triggered_spell_id = 47753;
+
+                    if (Aura* aura = pVictim->GetAura(triggered_spell_id, EFFECT_INDEX_0))
+                        basepoints[0] += aura->GetModifier()->m_amount;
+
+                    if (basepoints[0] > int32(pVictim->getLevel() * 125))
+                        basepoints[0] = int32(pVictim->getLevel() * 125);
+
                     break;
                 }
                 // Empowered Renew
