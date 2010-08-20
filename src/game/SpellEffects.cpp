@@ -2749,32 +2749,21 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 }
                 return;
             }
-            // Death Grip
+            //Death Grip
             else if (m_spellInfo->Id == 49576)
             {
                 if (!unitTarget)
                     return;
-
+ 
                 m_caster->CastSpell(unitTarget, 49560, true);
                 return;
             }
             else if (m_spellInfo->Id == 49560)
             {
-                if (!unitTarget)
-                    return;
-
-                uint32 spellId = m_spellInfo->CalculateSimpleValue(EFFECT_INDEX_0);
-                unitTarget->CastSpell(m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ(), spellId, true);
-                return;
-            }
-            // Death Grip
-            else if(m_spellInfo->Id == 49576)
-            {
-                if (!unitTarget)
-                    return;
-
-                unitTarget->KnockBackFrom(m_caster, -float(unitTarget->GetDistance2d(m_caster)), 6.0f);
-                m_caster->CastSpell(unitTarget, 49560, true);
+			    if (!unitTarget)
+				    return;
+ 
+                unitTarget->CastSpell(m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ(), m_spellInfo->CalculateSimpleValue(EFFECT_INDEX_0), true);
                 return;
             }
             // Obliterate
@@ -3061,7 +3050,7 @@ void Spell::EffectTriggerMissileSpell(SpellEffectIndex effect_idx)
 
 void Spell::EffectJump(SpellEffectIndex eff_idx)
 {
-    if(m_caster->IsTaxiFlying())
+    if(!unitTarget || m_caster->IsTaxiFlying())
         return;
 
     // Init dest coordinates
@@ -3085,6 +3074,8 @@ void Spell::EffectJump(SpellEffectIndex eff_idx)
                 pTarget = m_caster->GetMap()->GetUnit(((Player*)m_caster)->GetSelection());
 
             o = pTarget ? pTarget->GetOrientation() : m_caster->GetOrientation();
+			
+            m_caster->NearTeleportTo(x, y, z, o, true);
         }
         else
             o = m_caster->GetOrientation();
@@ -3105,7 +3096,9 @@ void Spell::EffectJump(SpellEffectIndex eff_idx)
         return;
     }
 
-    m_caster->NearTeleportTo(x, y, z, o, true);
+    float time = 1.0f;
+    // m_caster->NearTeleportTo(x, y, z, o, true);
+    m_caster->SendMonsterMove(x, y, z, SPLINETYPE_NORMAL, SPLINEFLAG_FALLING, time);
 }
 
 void Spell::EffectTeleportUnits(SpellEffectIndex eff_idx)
