@@ -7319,20 +7319,6 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     unitTarget->RemoveAurasDueToSpell(45438); // Ice Block
                     break;
                 }
-                case 64382:                                 // Shattering Throw
-                {
-                    if (!unitTarget || !unitTarget->isAlive())
-                        return;
-
-                    // remove immunity effects
-                    unitTarget->RemoveAurasDueToSpell(642); // Divine Shield
-                    unitTarget->RemoveAurasDueToSpell(1022); // Hand of Protection rank 1
-                    unitTarget->RemoveAurasDueToSpell(5599); // Hand of Protection rank 2
-                    unitTarget->RemoveAurasDueToSpell(10278); // Hand of Protection rank 3
-                    unitTarget->RemoveAurasDueToSpell(19753); // Divine Intervention
-                    unitTarget->RemoveAurasDueToSpell(45438); // Ice Block
-                    break;
-                }
             }
             break;
         }

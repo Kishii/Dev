@@ -2999,9 +2999,11 @@ void Spell::cast(bool skipCheck)
                 if (m_caster->HasAura(58375))               // Glyph of Blocking
                     AddTriggeredSpell(58374);               // Glyph of Blocking
             
-			// Shattering Throw
-            else if (m_spellInfo->Id == 64382)
-                AddTriggeredSpell(64380);                   // Shattering Throw
+            switch(m_spellInfo->Id)
+            {
+                case 64382: AddTriggeredSpell(64380); break;// Shattering Throw
+                default:break;
+            }
             break;
         }
         case SPELLFAMILY_PRIEST:
