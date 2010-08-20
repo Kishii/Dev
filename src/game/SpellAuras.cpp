@@ -8033,29 +8033,20 @@ void Aura::HandlePhase(bool apply, bool Real)
 
 void Aura::HandleIgnoreUnitState(bool apply, bool Real)
 {
-    if(m_target->GetTypeId() != TYPEID_PLAYER || !Real)
+    Unit *target = GetTarget();
+
+    if(target->GetTypeId() != TYPEID_PLAYER || !Real)
         return;
 
-    if(Unit* caster = GetCaster())
-    {
-        if (apply)
-        {
-            switch(GetId())
-            {
-                case 44544:
-                    SetAuraCharges(3);
-                    break;
-                case 64976:
-                case 57499:
-                    SetAuraSlot(255);
-                    SetAuraFlags(19);
-                    SendAuraUpdate(false);
-                    break;
-            }
-        }
-    }
-}
+    // Mastodonte
+    if (GetId() == 64976 && apply)
+        GetHolder()->SetAuraFlags(19);
+		
+    // for alowing charge/intercept/intervene in different stances
+    if (GetId() == 57499 && apply)
+        GetHolder()->SetAuraFlags(19);
 
+}
 
 void Aura::HandleAuraSafeFall( bool Apply, bool Real )
 {

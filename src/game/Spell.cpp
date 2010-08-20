@@ -3587,14 +3587,6 @@ void Spell::finish(bool ok)
     {
         switch((*j)->GetId())
         {
-            case 44544: // Fingers of Frost dissapear after two spells
-                if(!m_IsTriggeredSpell)
-                {
-                    if((*j)->DropAuraCharge())
-                        m_caster->RemoveAura((*j));
-                    break_for = true;
-                }
-                break; 
             case 52437:        //Sudden death should disappear after execute
                 if (m_spellInfo->SpellIconID == 1648)
                 {
