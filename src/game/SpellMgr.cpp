@@ -962,6 +962,10 @@ SpellCastResult GetErrorAtShapeshiftedCast (SpellEntry const *spellInfo, uint32 
             return SPELL_FAILED_ONLY_SHAPESHIFT;
     }
 
+    // Dash
+    if (spellInfo->SpellFamilyName == SPELLFAMILY_DRUID && (spellInfo->SpellFamilyFlags2 & 0x8) && form != FORM_CAT)
+        return SPELL_FAILED_ONLY_SHAPESHIFT;
+	
     return SPELL_CAST_OK;
 }
 
