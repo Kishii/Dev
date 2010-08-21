@@ -1508,7 +1508,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 case 2820:
                 {
                     if (!pVictim || !pVictim->isAlive())
-                        return false;
+                        return SPELL_AURA_PROC_FAILED;
 
                     basepoints[0] = damage * triggerAmount/100;
                     triggered_spell_id = 47753;

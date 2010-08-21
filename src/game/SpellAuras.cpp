@@ -8092,16 +8092,6 @@ bool Aura::IsCritFromAbilityAura(Unit* caster, uint32& damage)
         }
     }
 
-    // Special case for Rupture
-    if (m_spellProto->SpellFamilyName == SPELLFAMILY_ROGUE && (m_spellProto->SpellFamilyFlags & UI64LIT(0x100000)))
-        canCrit = true;
-
-    if (canCrit && caster->IsSpellCrit(GetTarget(), GetSpellProto(), GetSpellSchoolMask(GetSpellProto())))
-    {
-        damage = caster->SpellCriticalDamageBonus(GetSpellProto(), damage, GetTarget());
-        return true;
-    }
-
     // Special exception for Rupture spell, damage can crit after patch 3.3.3
     if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_ROGUE && GetSpellProto()->SpellFamilyFlags & UI64LIT(0x000000000000100000))
     {
@@ -8502,7 +8492,7 @@ void SpellAuraHolder::_RemoveSpellAuraHolder()
             m_target->ModifyAuraState(AURA_STATE_ENRAGE, false);
 
         // Mechanic bleed aura state
-        if(GetAllSpellMechanicMask(m_spellProto) & (1 << (MECHANIC_BLEED-1)))
+        if(GetAllSpellMechanicMask(m_spellProto) && (1 << (MECHANIC_BLEED-1)))
             m_target->ModifyAuraState(AURA_STATE_MECHANIC_BLEED, false);
 			
         uint32 removeState = 0;
